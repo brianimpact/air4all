@@ -5,18 +5,19 @@ Study unit summarization module generates the summarized text (or the abstractio
 Such summaries provided by [aistudy.guide](aistudy.guide) help users decide whether to study each study unit or not.
 
 
+
 ## 0. References
 References for our two-phase study unit summarizer is as follows:
 
 1. Content Summarization
 
-[TLDR: Extreme Summarization of Scientific Documents (Cachola et al., EMNLP 2020)](https://aclanthology.org/2020.findings-emnlp.428.pdf)
+    [TLDR: Extreme Summarization of Scientific Documents (Cachola et al., EMNLP 2020)](https://aclanthology.org/2020.findings-emnlp.428.pdf)
 
 2. Multi-Document Summarization
 
-[SPECTER: Document-level Representation Learning using Citation-informed Transformers (Cohan et al., ACL 2020)](https://aclanthology.org/2020.acl-main.207.pdf)
+    [SPECTER: Document-level Representation Learning using Citation-informed Transformers (Cohan et al., ACL 2020)](https://aclanthology.org/2020.acl-main.207.pdf)
 
-[SummPip: Unsupervised Multi-Document Summarization with Sentence Graph Compression (Zhao et al., SIGIR 2020)](https://dl.acm.org/doi/pdf/10.1145/3397271.3401327)
+    [SummPip: Unsupervised Multi-Document Summarization with Sentence Graph Compression (Zhao et al., SIGIR 2020)](https://dl.acm.org/doi/pdf/10.1145/3397271.3401327)
 
 ## 1. Content Summarization
 The first phase of the study unit summarization module is content summarization.
@@ -31,40 +32,42 @@ First, sentences without most of the punctuation marks (including commas, exclam
 
 Second, domain-specific terms were incorrectly transcribed due to their low prior.
 
-Thus, in scitldr.py, domain-specific terms are restored using metaphone-based correction and each content is summarized into separated sentences so that they can be used for unsupervised extractive multi-document summarization.
+Thus, in `scitldr.py`, domain-specific terms are restored using metaphone-based correction and each content is summarized into separated sentences so that they can be used for unsupervised extractive multi-document summarization.
 
 ### 1.1. Arguments
 
-Arguments of scitldr.py are as follows:
-```
-batch_size: minibatch size for text summarization (int)
-data_path: directory of the contents (str)
-out_path: directory of the summaries (str)
-checkpoint_dir: directory of the pretrained checkpoints (str)
-checkpoint_name: name of the pretrained checkpoints (str, recommended to use scitldr_catts.tldr-ao.pt)
-beam: beam size for better candidate search (int, see https://en.wikipedia.org/wiki/Beam_search)
-lenpen: penalty term for short candidates in beam search (float)
-max_len_b: upper limit on number of tokens in summary (int)
-min_len: lower limit on number of tokens in summary (int)
-no_repeat_ngram_size: term to prevent repeating n-grams (int, e.g. if set to 3, repeating trigrams are not generated)
-```
+Arguments of `scitldr.py` are as follows:
 
-For more information on ```beam, lenpen, max_len_b, min_len, no_repeat_ngram_size```, see [this documentation on fairseq's BART generation](https://fairseq.readthedocs.io/en/latest/command_line_tools.html#Generation).
+- `batch_size`: minibatch size for text summarization (int)
+- `data_path`: directory of the contents (str)
+- `out_path`: directory of the summaries (str)
+- `checkpoint_dir`: directory of the pretrained checkpoints (str)
+- `checkpoint_name`: name of the pretrained checkpoints (str) (recommended to use `scitldr_catts.tldr-ao.pt`)
+- `beam`: beam size for better candidate search (int) (see [wikipedia page on beam search](https://en.wikipedia.org/wiki/Beam_search))
+- `lenpen`: penalty term for short candidates in beam search (float)
+- `max_len_b`: upper limit on number of tokens in summary (int)
+- `min_len`: lower limit on number of tokens in summary (int)
+- `no_repeat_ngram_size`: term to prevent repeating n-grams (int) (e.g. if set to 3, repeating trigrams are not generated)
+
+For more information on `beam, lenpen, max_len_b, min_len, no_repeat_ngram_size`, see [documentation on fairseq's BART generation](https://fairseq.readthedocs.io/en/latest/command_line_tools.html#Generation).
 
 ### 1.2. Data
 
-As described above, contents (to be summarized) should be in ```data_path```, where each file in ```data_path``` has filename as follows:
-```<study_unit_id>) <study_unit_name>.txt```
+- As described above, contents (to be summarized) should be in `data_path`, where each file in `data_path` has filename as follows:
+`<study_unit_id>) <study_unit_name>.txt`
+    
+    e.g. `0) Scalars, Vectors, Matrices and Tensors.txt`
 
-e.g. ```0) Scalars, Vectors, Matrices and Tensors.txt```
+- Each line in a file consists of a content index and corresponding text, separated by a tab.
+    
+    e.g. `0\tThis is an example document....`
 
-Each line in a file consists of a content index and corresponding text, separated by a tab.
-
-e.g. ```0\tThis is an example document....```
-
-Results of scitldr.py are saved in ```out_path``` with filename like the files in ```data_path```, but with different extension.
-
-e.g. ```0) Scalars, Vectors, Matrices and Tensors.out```
+- Results of `scitldr.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
+    
+    e.g. `0) Scalars, Vectors, Matrices and Tensors.out`
 
 ### 1.3. Requirements
-scitldr.py requires the following libraries: ```torch, fairseq, tqdm```.
+`scitldr.py` requires the following libraries: `torch, fairseq, tqdm`.
+
+### 1.4. References
+[TLDR: Extreme Summarization of Scientific Documents (Cachola et al., EMNLP 2020)](https://aclanthology.org/2020.findings-emnlp.428.pdf)
