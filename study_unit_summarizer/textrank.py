@@ -1,20 +1,17 @@
+import argparse
 import os
 import re
-import argparse
-import random
-from networkx.algorithms import similarity
-from tqdm import tqdm
-from filter_summ import MyOwnLemmatizer, check_overlap, remove_redundant
 
-import torch
-from transformers import BertTokenizer, BertModel, AutoTokenizer, AutoModel
-
-import numpy as np
 import networkx as nx
-
-from rouge import Rouge
+import numpy as np
+import torch
 from nltk.translate.bleu_score import corpus_bleu
 from nltk.translate.meteor_score import meteor_score
+from rouge import Rouge
+from tqdm import tqdm
+from transformers import AutoModel, AutoTokenizer, BertModel, BertTokenizer
+
+from filter_summ import MyOwnLemmatizer, check_overlap, remove_redundant
 
 
 def cosine_similarity(v1, v2, t):
@@ -398,33 +395,31 @@ if __name__=='__main__':
     parser.add_argument('--similarity', default='rouge', type=str, choices=['cosine', 'exponential', 'inverse', 'rouge', 'bleu', 'meteor'])
     parser.add_argument('--merge', default='clustering', type=str, choices=['line', 'specter', 'maxpool', 'avgpool', 'clustering', 'clique'])
     parser.add_argument('--threshold', default=0.5, type=float)
-    parser.add_argument('--datadir', default='/data5/assets/jinhyun95/air4all/single_doc_summ/v220126', help='Path to data directory')
-    parser.add_argument('--outdir', default='/data5/assets/jinhyun95/air4all/multi_doc_summ/v220126', help='Path to output directory')
+    parser.add_argument('--data_path', default='/data5/assets/jinhyun95/air4all/single_doc_summ/v220126', help='Path to data directory')
+    parser.add_argument('--out_path', default='/data5/assets/jinhyun95/air4all/multi_doc_summ/v220126', help='Path to output directory')
 
     args = parser.parse_args()
     # CHECK PATHS
-    if not os.path.exists(args.datadir):
-        print(f'{args.datadir} does not exist')
+    if not os.path.exists(args.data_path):
+        print(f'{args.data_path} does not exist')
         exit(0)
-    os.makedirs(args.outdir, exist_ok=True)
-    if args.datadir.endswith('/'):
-        args.datadir = args.datadir[:-1]
+    os.makedirs(args.out_path, exist_ok=True)
 
     # SENTENCE EMBEDDING BASED APPROACH AND TEXT EVALUATION METRIC BASED APPROACH
     if args.sentence_embedding is None:
         extractor = MetricBasedExtractor(args.similarity, args.merge, args.threshold)
     else:
         extractor = EmbeddingExtractor(args.sentence_embedding, args.similarity, args.merge, args.threshold)
-    fnames = sorted([x for x in os.listdir(args.datadir) if x.endswith('.out')], key=lambda x: int(x.split(')')[0]))
+    fnames = sorted([x for x in os.listdir(args.data_path) if x.endswith('.out')], key=lambda x: int(x.split(')')[0]))
     for fname in tqdm(fnames):
-        with open(os.path.join(args.datadir, fname), 'r', encoding='utf8') as f:
+        with open(os.path.join(args.data_path, fname), 'r', encoding='utf8') as f:
             lines = f.read()
         if len(lines) == 0:
             continue
         title = fname.split(') ', 1)[1].replace('.out', '')
         ranked_list = extractor(lines, title)
         summ, verbose = make_string(ranked_list)
-        with open(os.path.join(args.outdir, fname.replace('.out', '.txt')), 'w', encoding='utf8') as f:
+        with open(os.path.join(args.out_path, fname.replace('.out', '.txt')), 'w', encoding='utf8') as f:
             f.write('# SUMMARY UP TO 500 CHARACTERS (DATABASE FORMAT)\n')
             f.write(summ + '\n\n')
             f.write('# SENTENCE RANKING\n')

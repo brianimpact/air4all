@@ -39,7 +39,7 @@ def tldr_summarization(batch_size, data_path, out_path, checkpoint_dir, checkpoi
                 # DATA FORMAT: INDEX AND TEXT SEPARATED BY TAB IN EVERY LINE
                 source_line = source_line.split('\t')[1]
                 # TRANSCRIPT ERROR FIX
-                # CHECK FOR WORDS WITH SAME METAPHONE AS THE WORDS IN LABEL (SU) NAME
+                # CHECK FOR WORDS WITH SAME METAPHONE AS THOSE IN STUDY UNIT NAME AND RESTORE THEM AS THEY ARE PRESUMED TO BE INCORRECTLY TRANSCRIBED
                 source_line = fix_misrecognition(source_file, source_line)
                 # CONVERT ABBREVIATED WORDS INTO THEIR FULL PHRASE
                 source_line = inverse_abbreviate(source_file, source_line)
@@ -92,16 +92,19 @@ if __name__=='__main__':
 
     start = time.time()
 
-    # check for paths
+    # DIRECTORY CHECK
     if not os.path.exists(args.data_path):
+        # DATA DOES NOT EXIST - EXIT
         print('DATA PATH %s DOES NOT EXIST' % args.data_path)
         exit()
     if args.data_path.endswith('/'):
         args.data_path = args.data_path[:-1]
     if not os.path.exists(args.out_path):
+        # OUTPUT PATH DOES NOT EXIST - MAKE DIRECTORY
         print('OUTPUT PATH %s DOES NOT EXIST / CREATING OUTPUT PATH' % args.out_path)
         os.makedirs(args.out_path)
     if not os.path.exists(args.checkpoint_dir):
+        # PRETRAINED CHECKPOINT DOES NOT EXIST - EXIT
         print('CKPT PATH %s DOES NOT EXIST' % args.checkpoint_dir)
         exit()
 
