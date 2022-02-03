@@ -1,14 +1,14 @@
-# Study Unit Summarization
+# Study Unit Summarizer
 
-Study unit summarization module generates the summarized text (or the abstraction) of each study unit based on the corresponding contents.
+Study unit summarizer generates the summarized text (or the abstraction) of each study unit based on the corresponding contents.
 
 Such summaries provided by [aistudy.guide](aistudy.guide) help users decide whether to study each study unit or not.
 
-Study unit summarization proceeds in the following two steps: content summarization and multi-document summarization.
+Study unit summarizer operates in the following two steps: content summarization and multi-document summarization.
 
 
 ## 1. Content Summarization
-The first phase of the study unit summarization module is content summarization.
+The first phase of the study unit summarizer is content summarization.
 
 In order to preserve information in long contents, sliding windows of sizes 1,024, 512, and 256 are used to summarize the tokens in the windows, where each window's stride is half of its window size.
 
@@ -64,7 +64,7 @@ For more information on `beam, lenpen, max_len_b, min_len, no_repeat_ngram_size`
 
 ## 2. Multi-Document Summarization
 
-The second phase of the study unit summarization module is multi-document summarization, performed in an unsupervised extractive fashion.
+The second phase of the study unit summarizer is multi-document summarization, performed in an unsupervised extractive fashion.
 
 `textrank.py` provides various methods for text representation and extractive summarization.
 
