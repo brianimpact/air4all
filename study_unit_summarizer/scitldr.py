@@ -1,13 +1,12 @@
+import argparse
 import os
 import time
 import warnings
-import argparse
-from tqdm import tqdm
-import sys
+
 import torch
 from fairseq.models.bart import BARTModel
-
-from utils.transcript_cleansing import fix_misrecognition, inverse_abbreviate
+from tqdm import tqdm
+from transcript_cleansing import fix_misrecognition, inverse_abbreviate
 
 
 def tldr_summarization(batch_size, data_path, out_path, checkpoint_dir, checkpoint_name,
@@ -20,7 +19,6 @@ def tldr_summarization(batch_size, data_path, out_path, checkpoint_dir, checkpoi
     )
     if torch.cuda.is_available():
         model.cuda()
-        model.half() # TODO: REMOVE AFTER TESTING
     model.eval()
 
     # CHECK FOR FILES THAT ARE ALREADY PROCESSED
@@ -64,9 +62,9 @@ def tldr_summarization(batch_size, data_path, out_path, checkpoint_dir, checkpoi
                             break
                 # SUMMARIZATION
                 summarized = []
-                minibatches = [source_segments[i * batch_size: (i + 1) * batch_size] for i in range(len(source_segments // batch_size))]
+                minibatches = [source_segments[i * batch_size: (i + 1) * batch_size] for i in range(len(source_segments) // batch_size)]
                 if len(source_segments) % batch_size != 0:
-                    minibatches.append(source_segments[source_segments // batch_size * batch_size:])
+                    minibatches.append(source_segments[len(source_segments) // batch_size * batch_size:])
                 for minibatch in minibatches:
                     with torch.no_grad():
                         out = model.sample(minibatch, beam=beam, lenpen=lenpen, max_len_b=max_len_b, min_len=min_len, no_repeat_ngram_size=no_repeat_ngram_size)
@@ -82,7 +80,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', default=16, type=int)
     parser.add_argument('--data_path', default='/data5/air4all/contents', help='Path to data')
-    parser.add_argument('--out_path', default='/data5/assets/jinhyun95/air4all/single_doc_summ/v220126', help='Path to output')
+    parser.add_argument('--out_path', default='/data5/assets/jinhyun95/air4all/single_doc_summ/testrun', help='Path to output')
     parser.add_argument('--checkpoint_dir', default='/home/jinhyun95/AIRoadmap4All/models/single_doc/checkpoints', help='Checkpoint directory')
     parser.add_argument('--checkpoint_name', default='scitldr_catts.tldr-ao.pt', help='Name of the checkpoint')
     parser.add_argument('--beam', default=2, type=int)
