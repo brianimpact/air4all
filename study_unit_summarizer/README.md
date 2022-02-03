@@ -119,7 +119,7 @@ Arguments of `textrank.py` are as follows:
 - In each file in `out_path`, ranking scores of each sentence and the resulting summary (consisting up to 500 letters) of the study unit are reported.
 
 ### 2.3. Requirements
-`scitldr.py` requires the following libraries: `networkx, numpy, torch, nltk, rouge, tqdm, transformers`.
+`textrank.py` requires the following libraries: `networkx, numpy, torch, nltk, rouge, tqdm, transformers`.
 
 ### 2.4. References
 [SPECTER: Document-level Representation Learning using Citation-informed Transformers (Cohan et al., ACL 2020)](https://aclanthology.org/2020.acl-main.207.pdf)
