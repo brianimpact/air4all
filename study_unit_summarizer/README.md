@@ -127,3 +127,5 @@ Arguments of `textrank.py` are as follows:
 [SCIBERT: A Pretrained Language Model for Scientific Text (Beltagy et al., EMNLP 2019)](https://aclanthology.org/D19-1371.pdf)
 
 [SummPip: Unsupervised Multi-Document Summarization with Sentence Graph Compression (Zhao et al., SIGIR 2020)](https://dl.acm.org/doi/pdf/10.1145/3397271.3401327)
+
+[TextRank: Bringing Order into Texts (Mihalcea and Tarau, EMNLP 2004)](https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf)
