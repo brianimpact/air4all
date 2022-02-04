@@ -161,6 +161,9 @@ def train(config):
             logger.info('CUDA UNAVAILABLE: RUNNING ON CPU')
     elif torch.cuda.is_available():
         torch.cuda.empty_cache()
+    postproc = [{'none', 'remove', 'connect'}[config.postprocessing.isolated_leaf],
+                {'none', 'remove'}[config.postprocessing.unfinished_path],
+                {'none', 'argmax_leaf', 'argmax_path'}[config.postprocessing.if_empty]]
     # TEST DATASET AND DATALOADER GENERATED
     test_dataset = HTCDataset(config, 'test', label_ids)
     test_dataloader = torch.utils.data.DataLoader(test_dataset, config.training.batch_size, shuffle=False, num_workers=config.device.num_workers, collate_fn=collate_function, drop_last=False)
@@ -184,7 +187,7 @@ def train(config):
         epoch_logits = torch.cat(epoch_logits, dim=0).cpu().numpy()
         # THRESHOLD 0.5, REMOVE ISOLATED LEAVES, REMOVE DANGLING TOPICS, AND SELECT ARGMAX SU IF NO SU IS SELECTED
         epoch_predictions = 1. / (1. + np.exp(- epoch_logits)) >= 0.5
-        test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, [1, 1, 1])
+        test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, postproc)
         logger.info('TEST FOR BEST MICRO F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                     % (best_micro_epoch, test_performances['micro-f1'], test_performances['macro-f1'], test_performances['average-f1']))
     correct_labels = []
@@ -211,7 +214,7 @@ def train(config):
             epoch_logits = torch.cat(epoch_logits, dim=0).cpu().numpy()
             # THRESHOLD 0.5, REMOVE ISOLATED LEAVES, REMOVE DANGLING TOPICS, AND SELECT ARGMAX SU IF NO SU IS SELECTED
             epoch_predictions = 1. / (1. + np.exp(- epoch_logits)) >= 0.5
-            test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, [1, 1, 1])
+            test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, postproc)
             logger.info('TEST FOR BEST MACRO F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                         % (best_micro_epoch, test_performances['micro-f1'], test_performances['macro-f1'], test_performances['average-f1']))
     else:
@@ -235,7 +238,7 @@ def train(config):
             epoch_logits = torch.cat(epoch_logits, dim=0).cpu().numpy()
             # THRESHOLD 0.5, REMOVE ISOLATED LEAVES, REMOVE DANGLING TOPICS, AND SELECT ARGMAX SU IF NO SU IS SELECTED
             epoch_predictions = 1. / (1. + np.exp(- epoch_logits)) >= 0.5
-            test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, [1, 1, 1])
+            test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, postproc)
             logger.info('TEST FOR BEST AVERAGE F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                         % (best_average_epoch, test_performances['micro-f1'], test_performances['macro-f1'], test_performances['average-f1']))
     elif best_average_epoch == best_micro_epoch: 

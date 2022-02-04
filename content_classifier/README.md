@@ -8,7 +8,7 @@ In order to make use of the hierarchical structure of topics, a hierarchical tex
 
 Specifically, [Hierarchy-Aware Global Model (HiAGM)](https://aclanthology.org/2020.acl-main.104.pdf) with enhanced text feature extraction is implemented as our content classifier.
 
-While the original HiAGM makes use of [GloVe](https://nlp.stanford.edu/pubs/glove.pdf), this version utilizes [SciBERT](https://aclanthology.org/D19-1371.pdf)
+While the original HiAGM makes use of [GloVe](https://nlp.stanford.edu/pubs/glove.pdf), this version utilizes [SciBERT](https://aclanthology.org/D19-1371.pdf).
 
 ### 1. Configuration
 
@@ -50,6 +50,24 @@ Attributes of a configuration are as follows:
     
     - `config.path.data`: specifies where the files containing required data are saved (includes `train`, `val`, `test`, `labels`, `prior`, and `hierarchy`)
 
+- `config.postprocessing`: specifies how to postprocess inferred labels
+    
+    - `config.postprocessing.isolated_leaf`
+
+        - `remove`: if not labeled as ancestors, remove leaves
+        - `connect`: if labeled as a leaf, label as its ancestors
+        - `none`: do not postprocess
+    
+    - `config.postprocessing.unfinished_path`
+
+        - `remove`: if not labeled as leaf, remove ancestors
+        - `none`: do not postprocess
+    
+    - `config.postprocessing.if_empty`
+        
+        - `argmax_leaf`: if not labeled as any, label as the path to the leaf to the highest likelihood
+        - `argmax_path`: if not labeled as any, label as the path with the highest geometric average likelihood
+        - `none`: do not postprocess
 
 ### 2. Data
 

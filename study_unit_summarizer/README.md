@@ -26,16 +26,16 @@ Thus, in `scitldr.py`, domain-specific terms are restored using metaphone-based 
 
 Arguments of `scitldr.py` are as follows:
 
-- `batch_size`: minibatch size for text summarization (int)
-- `data_path`: directory of the contents (str)
-- `out_path`: directory of the summaries (str)
-- `checkpoint_dir`: directory of the pretrained checkpoints (str)
-- `checkpoint_name`: name of the pretrained checkpoints (str) (recommended to use `scitldr_catts.tldr-ao.pt`)
-- `beam`: beam size for better candidate search (int) (see [wikipedia page on beam search](https://en.wikipedia.org/wiki/Beam_search))
-- `lenpen`: penalty term for short candidates in beam search (float)
-- `max_len_b`: upper limit on number of tokens in summary (int)
-- `min_len`: lower limit on number of tokens in summary (int)
-- `no_repeat_ngram_size`: term to prevent repeating n-grams (int) (e.g. if set to 3, repeating trigrams are not generated)
+- `--batch_size`: minibatch size for text summarization (int)
+- `--data_path`: directory of the contents (str)
+- `--out_path`: directory of the summaries (str)
+- `--checkpoint_dir`: directory of the pretrained checkpoints (str)
+- `--checkpoint_name`: name of the pretrained checkpoints (str) (recommended to use `scitldr_catts.tldr-ao.pt`)
+- `--beam`: beam size for better candidate search (int) (see [wikipedia page on beam search](https://en.wikipedia.org/wiki/Beam_search))
+- `--lenpen`: penalty term for short candidates in beam search (float)
+- `--max_len_b`: upper limit on number of tokens in summary (int)
+- `--min_len`: lower limit on number of tokens in summary (int)
+- `--no_repeat_ngram_size`: term to prevent repeating n-grams (int) (e.g. if set to 3, repeating trigrams are not generated)
 
 For more information on `beam, lenpen, max_len_b, min_len, no_repeat_ngram_size`, see [documentation on fairseq's BART generation](https://fairseq.readthedocs.io/en/latest/command_line_tools.html#Generation).
 
@@ -72,7 +72,7 @@ The second phase of the study unit summarizer is multi-document summarization, p
 
 Arguments of `textrank.py` are as follows:
 
-- `sentence_embedding`: specifies how to represent each sentence (str)
+- `--sentence_embedding`: specifies how to represent each sentence (str)
     
     - `specter`: [pretrained document-level embedding of scientific papers](https://aclanthology.org/2020.acl-main.207.pdf)
     - `bert11avg`: representation obtained by average-pooling outputs of 11-th layer in [SciBERT](https://aclanthology.org/D19-1371.pdf)
@@ -83,7 +83,7 @@ Arguments of `textrank.py` are as follows:
     - `bert12cls`: representation obtained from \[CLS\] token of 12-th layer in [SciBERT](https://aclanthology.org/D19-1371.pdf)
     - `None`: use text generation evaluation metric (ROUGE, BLEU, METEOR) as sentence similarity
 
-- `similarity`: specifies how to measure similarities between sentences (str)
+- `--similarity`: specifies how to measure similarities between sentences (str)
     
     - `cosine`: cosine similarity between SciBERT or SPECTER-based representations
     - `exponential`: [exponential similarity](https://link.springer.com/content/pdf/10.1007/s42452-019-1142-8.pdf) between SciBERT or SPECTER-based representations
@@ -92,7 +92,7 @@ Arguments of `textrank.py` are as follows:
     - `bleu`: [BLEU score](https://aclanthology.org/P02-1040.pdf)
     - `meteor`: [METEOR score](https://aclanthology.org/W05-0909.pdf)
 
-- `merge`: specifies how to merge sentences to generate multi-document summarization (str)
+- `--merge`: specifies how to merge sentences to generate multi-document summarization (str)
 
     - `line`: [TextRank algorithm](https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf)
     - `specter`: integrates SPECTER-based content-level TextRank and sentence-level TextRank
@@ -101,9 +101,9 @@ Arguments of `textrank.py` are as follows:
     - `clustering`: sentence clustering
     - `clique`: graph-based sentence clustering introduced in [SummPip](https://dl.acm.org/doi/pdf/10.1145/3397271.3401327)
 
-- `threshold`: clustering threshold used for `clustering` or `clique` (float)
-- `data_path`: directory of the SciTLDR results obtained by content summarization (str)
-- `out_path`: directory of the study unit summarization (multi-document summarization) results (str)
+- `--threshold`: clustering threshold used for `clustering` or `clique` (float)
+- `--data_path`: directory of the SciTLDR results obtained by content summarization (str)
+- `--out_path`: directory of the study unit summarization (multi-document summarization) results (str)
 
 ### 2.2. Data
 
