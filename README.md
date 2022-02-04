@@ -1,5 +1,7 @@
-# AIR4*
-여기 이미지 넣기(메인페이지)
+# AI Roadmap for All (AIR4*)
+<a href="#">
+  <img src="/img/banner.png" url= width="100%" height="auto">
+  </a>
 
 [🇰🇷 국문 소개](#소개) [🇱🇷 english introduction](#introduction)
 
