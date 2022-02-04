@@ -20,11 +20,11 @@ First, sentences without most of the punctuation marks (including commas, exclam
 
 Second, domain-specific terms were incorrectly transcribed due to their low prior.
 
-Thus, in `scitldr.py`, domain-specific terms are restored using metaphone-based correction and each content is summarized into separated sentences so that they can be used for unsupervised extractive multi-document summarization.
+Thus, in `content_summarization.py`, domain-specific terms are restored using metaphone-based correction and each content is summarized into separated sentences so that they can be used for unsupervised extractive multi-document summarization.
 
 ### 1.1. Arguments
 
-Arguments of `scitldr.py` are as follows:
+Arguments of `content_summarization.py` are as follows:
 
 - `--batch_size`: minibatch size for text summarization (int)
 - `--data_path`: directory of the contents (str)
@@ -50,12 +50,12 @@ For more information on `beam, lenpen, max_len_b, min_len, no_repeat_ngram_size`
     
     e.g. `0\tThis is an example document....`
 
-- Results of `scitldr.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
+- Results of `content_summarization.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
     
     e.g. `0) Scalars, Vectors, Matrices and Tensors.out`
 
 ### 1.3. Requirements
-`scitldr.py` requires the following libraries: `torch, fairseq, tqdm`.
+`content_summarization.py` requires the following libraries: `torch, fairseq, tqdm`.
 
 ### 1.4. References
 [TLDR: Extreme Summarization of Scientific Documents (Cachola et al., EMNLP 2020)](https://aclanthology.org/2020.findings-emnlp.428.pdf)
@@ -66,11 +66,11 @@ For more information on `beam, lenpen, max_len_b, min_len, no_repeat_ngram_size`
 
 The second phase of the study unit summarizer is multi-document summarization, performed in an unsupervised extractive fashion.
 
-`textrank.py` provides various methods for text representation and extractive summarization.
+`multi_document_summarization.py` provides various methods for text representation and extractive summarization.
 
 ### 2.1. Arguments
 
-Arguments of `textrank.py` are as follows:
+Arguments of `multi_document_summarization.py` are as follows:
 
 - `--sentence_embedding`: specifies how to represent each sentence (str)
     
@@ -112,14 +112,14 @@ Arguments of `textrank.py` are as follows:
     
     e.g. `0) Scalars, Vectors, Matrices and Tensors.out`
 
-- Results of `textrank.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
+- Results of `multi_document_summarization.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
     
     e.g. `0) Scalars, Vectors, Matrices and Tensors.txt`
 
 - In each file in `out_path`, ranking scores of each sentence and the resulting summary (consisting up to 500 letters) of the study unit are reported.
 
 ### 2.3. Requirements
-`textrank.py` requires the following libraries: `networkx, numpy, torch, nltk, rouge, tqdm, transformers`.
+`multi_document_summarization.py` requires the following libraries: `networkx, numpy, torch, nltk, rouge, tqdm, transformers`.
 
 ### 2.4. References
 [SPECTER: Document-level Representation Learning using Citation-informed Transformers (Cohan et al., ACL 2020)](https://aclanthology.org/2020.acl-main.207.pdf)
