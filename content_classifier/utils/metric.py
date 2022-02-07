@@ -15,25 +15,25 @@ def f1_scores(labels, logits, predictions, label_ids, label_sequences, mode=[0, 
             modified_predictions[i, :] = select_argmax_su(modified_predictions[i, :], logits[i, :], label_ids, label_sequences)
         if mode[2] == 2:
             modified_predictions[i, :] = select_argmax_path(modified_predictions[i, :], logits[i, :], label_ids, label_sequences)
-            
-    true_positive = (labels * (labels == modified_predictions)).sum(0)
-    true_negative = ((1. - labels) * (labels == modified_predictions)).sum(0)
-    false_positive = ((1. - labels) * (labels != modified_predictions)).sum(0)
-    false_negative = (labels * (labels != modified_predictions)).sum(0)
+
+    true_positive = (labels * (labels == modified_predictions)).sum(0)[labels.sum(0) > 0]
+    true_negative = ((1. - labels) * (labels == modified_predictions)).sum(0)[labels.sum(0) > 0]
+    false_positive = ((1. - labels) * (labels != modified_predictions)).sum(0)[labels.sum(0) > 0]
+    false_negative = (labels * (labels != modified_predictions)).sum(0)[labels.sum(0) > 0]
     
-    micro_precision = (true_positive.sum() / (true_positive.sum() + false_positive.sum())).item()
-    micro_recall = (true_positive.sum() / (true_positive.sum() + false_negative.sum())).item()
+    micro_precision = true_positive.sum() / (true_positive.sum() + false_positive.sum())
+    micro_recall = true_positive.sum() / (true_positive.sum() + false_negative.sum())
     micro_f1 = 2 * micro_precision * micro_recall / (micro_precision + micro_recall)
 
-    precisions = (true_positive / (true_positive + false_positive + 1e-8))[true_positive + false_positive + false_negative > 0]
-    recalls = (true_positive / (true_positive + false_negative + 1e-8))[true_positive + false_positive + false_negative > 0]
+    precisions = true_positive / (true_positive + false_positive + 1e-8)
+    recalls = true_positive / (true_positive + false_negative + 1e-8)
 
-    macro_precision = precisions.mean().item()
-    macro_recall = recalls.mean().item()
+    macro_precision = precisions.mean()
+    macro_recall = recalls.mean()
     macro_f1 = 2 * macro_precision * macro_recall / (macro_precision + macro_recall)
 
     f1s = 2 * precisions * recalls / (precisions + recalls + 1e-8)
-    average_f1 = f1s.mean().item()
+    average_f1 = f1s.mean()
 
     return {'micro-f1': micro_f1, 'macro-f1': macro_f1, 'average-f1':average_f1}
 

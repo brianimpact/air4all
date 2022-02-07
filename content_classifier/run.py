@@ -15,7 +15,7 @@ from model import hiagm
 from utils.configuration import Configuration
 from utils.dataloader import HTCDataset, collate_fn
 from utils.file_and_ckpt import *
-from utils.loss import RecursiveRegularizationLoss
+from utils.loss import RecursiveRegularizationLoss, LabelContradictionPenalty
 from utils.metric import f1_scores
 
 
@@ -35,6 +35,7 @@ def train(config):
     # MODEL, CRITERION, OPTIMIZER AND SCHEDULER DEFINITION
     model = hiagm.HiAGM(config, label_ids)
     criterion = RecursiveRegularizationLoss(config, hierarchy)
+    penalty = LabelContradictionPenalty(config, hierarchy)
     optimizer = getattr(torch.optim, config.training.optimizer.type)(params=model.parameters(), lr=config.training.optimizer.learning_rate)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=config.training.schedule.decay)
     logger.info('MODEL GENERATED')
@@ -77,6 +78,8 @@ def train(config):
                 # FORWARD
                 logits = model(batch)
                 loss = criterion(logits, batch[3], model.module.information_aggregation.classifiers)
+                if penalty.penalty_weight > 0:
+                    loss += penalty(logits)
                 total_loss += loss.item()
                 epoch_labels.append(batch[3])
                 epoch_logits.append(logits.detach().cpu())
@@ -104,6 +107,8 @@ def train(config):
                     # BATCH: (batch_input_ids, batch_token_type_ids, batch_attention_mask, batch_labels, batch_length)
                     logits = model(batch)
                     loss = criterion(logits, batch[3], model.module.information_aggregation.classifiers)
+                    if penalty.penalty_weight > 0:
+                        loss += penalty(logits)
                     total_loss += loss.item()
                     epoch_labels.append(batch[3])
                     epoch_logits.append(logits.detach().cpu())
