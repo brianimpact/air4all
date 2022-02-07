@@ -14,10 +14,13 @@ class TextFeaturePropagation(nn.Module):
         self.linear_transformation = nn.Linear(self.config.model.cnn.pooling_k * self.config.model.cnn.dimension * len(self.config.model.cnn.kernels),
                                                len(self.label_ids) * self.config.model.structure_encoder.dimension)
         self.dropout = nn.Dropout(self.config.model.feature_aggregation.dropout)
-        # INEFFICIENT CLASSIFIER DEFINED AS MODULE LIST (BUT IS QUITE EFFICIENT FOR RECURSIVE REGULARIZATION AS IT REDUCES TIME BY ~ 65%)
-        self.classifiers = nn.ModuleList()
-        for _ in self.label_ids:
-            self.classifiers.append(nn.Linear(len(self.label_ids) * self.config.model.structure_encoder.dimension, 1))
+        if self.config.training.recursive_regularization_penalty > 0:
+            # INEFFICIENT CLASSIFIER DEFINED AS MODULE LIST (BUT IS QUITE EFFICIENT FOR RECURSIVE REGULARIZATION AS IT REDUCES TIME BY ~ 65%)
+            self.classifiers = nn.ModuleList()
+            for _ in self.label_ids:
+                self.classifiers.append(nn.Linear(len(self.label_ids) * self.config.model.structure_encoder.dimension, 1))
+        else:
+            self.classifiers = nn.Linear(len(self.label_ids) * self.config.model.structure_encoder.dimension, len(self.label_ids))
     
     def forward(self, inputs):
         flattened = inputs.view(inputs.size(0), -1) # B*(#CNN)kD(CNN) --> (#CNN)k acts as the number of CNN feature set
@@ -25,5 +28,8 @@ class TextFeaturePropagation(nn.Module):
         node_inputs = node_inputs.view(inputs.size(0), len(self.label_ids), -1) # B*|V|*D(NODE)
         labelwise_text_feature = self.structure_encoder(node_inputs) # B*|V|*D(NODE)
         labelwise_text_feature = labelwise_text_feature.view(inputs.size(0), -1)
-        logits = torch.cat([classifier(labelwise_text_feature) for classifier in self.classifiers], dim=1)
+        if isinstance(self.classifiers, nn.ModuleList):
+            logits = torch.cat([classifier(labelwise_text_feature) for classifier in self.classifiers], dim=1)
+        else:
+            logits = self.classifiers(labelwise_text_feature)
         return logits

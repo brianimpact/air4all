@@ -2,7 +2,7 @@ import math
 import numpy as np
 
 
-def f1_scores(labels, logits, predictions, label_ids, label_sequences, mode = [0, 0, 0]):
+def f1_scores(labels, logits, predictions, label_ids, label_sequences, mode=[0, 0, 0]):
     modified_predictions = np.copy(predictions)
     for i in range(labels.shape[0]):
         if mode[0] == 1:
@@ -15,6 +15,7 @@ def f1_scores(labels, logits, predictions, label_ids, label_sequences, mode = [0
             modified_predictions[i, :] = select_argmax_su(modified_predictions[i, :], logits[i, :], label_ids, label_sequences)
         if mode[2] == 2:
             modified_predictions[i, :] = select_argmax_path(modified_predictions[i, :], logits[i, :], label_ids, label_sequences)
+            
     true_positive = (labels * (labels == modified_predictions)).sum(0)
     true_negative = ((1. - labels) * (labels == modified_predictions)).sum(0)
     false_positive = ((1. - labels) * (labels != modified_predictions)).sum(0)
