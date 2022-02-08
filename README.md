@@ -23,6 +23,10 @@ Study Unit Summarizer는 학습 자료가 제공되는 AI 관련 세부 주제(�
 Content Classifier는 학습 자료를 해당하는 학습 주제들과 학습 단위들로 분류합니다.
 새로 서비스에 추가되는 학습 자료를 그에 해당하는 주제로 분류하여 서비스의 커버리지를 확장할 수 있게 보조합니다.
 
+### 학습 주제 그래프 확장 모듈(Topic Graph Expansion)
+Topic Graph Expansion Module은 새로운 개념(학습 주제 또는 학습 단위)이 추가될 때 이를 기존 학습 주제 그래프에 통합하여 확장합니다. 
+서비스의 커버리지를 확장하며 최신 학습 주제가 반영된 로드맵에서 학습할 수 있도록 보조합니다.
+
 <br>
 
 ## Introduction
@@ -41,3 +45,7 @@ This module is designed to inform users on what each study unit will be about to
 
 ### Content Classifier
 Content Classifier labels each study material (content) with corresponding AI-related topics and study units.
+
+### Topic Graph Expansion Module 
+Topic Graph Expansion Module automatically expands the existing topic graph to incorporate a set of emerging concepts (topics or study units). 
+It expands the coverage to help users learn from the roadmap that reflects the up-to-date topics.
