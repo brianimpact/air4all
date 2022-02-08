@@ -195,13 +195,7 @@ def train(config):
         test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, postproc)
         logger.info('TEST FOR BEST MICRO F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                     % (best_micro_epoch, test_performances['micro-f1'], test_performances['macro-f1'], test_performances['average-f1']))
-    correct_labels = []
-    correct_texts = []
-    i2l = {label_ids[k]: k for k in label_ids.keys()}
-    for i in range(epoch_labels.shape[0]):
-        if (epoch_labels[i, :] == epoch_predictions[i, :]).all():
-            correct_texts.append(test_dataset.text[i])
-            correct_labels.append([i2l[k] for k in range(epoch_labels.shape[1]) if epoch_labels[i, k]])    
+        all_performances.append(test_performances)
 
     best_macro_epoch = load_checkpoint(best_macro_f1_model, model, optimizer, 'test')
     logger.info('BEST MACRO F1 CHECKPOINT FROM EPOCH %d LOADED FOR TEST' % best_macro_epoch)
@@ -220,6 +214,7 @@ def train(config):
             test_performances = f1_scores(epoch_labels, epoch_logits, epoch_predictions, label_ids, label_sequences, postproc)
             logger.info('TEST FOR BEST MACRO F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                         % (best_micro_epoch, test_performances['micro-f1'], test_performances['macro-f1'], test_performances['average-f1']))
+            all_performances.append(test_performances)
     else:
         logger.info('TEST FOR BEST MACRO F1 CHECKPOINT (EPOCH %d) FINISHED. MICRO-F1: %f | MACRO-F1: %f | AVERAGE-F1: %f'
                      % (best_macro_epoch, all_performances[0]['micro-f1'], all_performances[0]['macro-f1'], all_performances[0]['average-f1']))
