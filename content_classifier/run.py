@@ -245,8 +245,7 @@ def train(config):
 
 if __name__ == "__main__":
     warnings.filterwarnings('ignore')
-    # config_path = sys.argv[1]
-    config_path = '/home/jinhyun95/air4all/content_classifier/configs/focal_cntrpen_config.json'
+    config_path = sys.argv[1]
     assert os.path.isfile(config_path), "CONFIGURATION FILE DOES NOT EXIST"
     with open(config_path, 'r') as fin:
         config = json.load(fin)
