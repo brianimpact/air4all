@@ -30,11 +30,9 @@ class Taxo(object):
 
 
 class AIDataset(object):
-    #def __init__(self, taxonomy_name, dataset_path, load_file=True, partitioned=False, sample_position='internal'):
     def __init__(self, taxonomy_name, dataset_path, load_file=True, partitioned=False):
         self.taxonomy_name = taxonomy_name  # taxonomy name
         self.partitioned = partitioned
-        #self.sample_position = sample_position
 
         self.full_graph = dgl.DGLGraph()  # full graph (including masked train/validation node indices)
         self.train_node_ids = []
@@ -127,7 +125,6 @@ class AIDataset(object):
 
 
             # generate vocab
-            ## taxo_id is the old taxo_id read from {self.name}.terms file, node_id is the new taxon_id from 0 to len(vocab)
             taxo_id2node_id = {node.taxo_id:idx for idx, node in enumerate(taxonomy.nodes())}
             node_id2taxo_id = {v:k for k, v in taxo_id2node_id.items()}
             self.vocab = [taxo_id2taxo[node_id2taxo_id[node_id]].name + "@" + str(node_id) for node_id in node_id2taxo_id]
@@ -162,8 +159,6 @@ class AIDataset(object):
                 self.test_node_ids = [taxo_id2node_id[taxo_id] for taxo_id in partitioned_test_node_list]
 
             else:
-                # for internal nodes
-                #if self.sample_position == 'internal':
                 root_node = [node for node in taxonomy.nodes() if taxonomy.in_degree(node) == 0]
                 sampled_node_ids = [taxo_id2node_id[node.taxo_id] for node in taxonomy.nodes() if node not in root_node]
                 random.seed(47)
@@ -176,24 +171,7 @@ class AIDataset(object):
                 self.val_node_ids = sampled_node_ids[:val_size]
                 self.test_node_ids = sampled_node_ids[val_size:(val_size + test_size)]
                 self.train_node_ids = [node_id for node_id in node_id2taxo_id if node_id not in self.val_node_ids and node_id not in self.test_node_ids]
-                # for leaf nodes
-                #elif self.sample_position == 'leaf':
-                #    leaf_node_ids = []
-                #    for node in taxonomy.nodes():
-                #        if taxonomy.out_degree(node) == 0: # leaf
-                #            leaf_node_ids.append(taxo_id2node_id[node.taxo_id])
-                #    random.seed(47)
-                #    random.shuffle(leaf_node_ids)
 
-                #    val_size = min(int(len(leaf_node_ids) * 0.1), max_val_size)
-                #    test_size = min(int(len(leaf_node_ids) * 0.1), max_test_size)
-                #    self.val_node_ids = leaf_node_ids[:val_size]
-                #    self.test_node_ids = leaf_node_ids[val_size:(val_size + test_size)]
-                #    self.train_node_ids = [node_id for node_id in node_id2taxo_id if node_id not in self.val_node_ids and node_id not in self.test_node_ids]
-                #else:
-                #    raise ValueError('invalid sample position. sample position should be either internal or leaf.')
-
-                # save to pickle for faster loading next time
                 with open(output_pickle_file, 'wb') as fout:
                     data = {
                         "taxonomy_name": self.taxonomy_name,
@@ -235,9 +213,7 @@ class RawDataset(Dataset):
 
         fullgraph = graph_dataset.full_graph.to_networkx()
         root_node = [node for node in fullgraph.nodes() if fullgraph.in_degree(node) == 0]
-
         train_node_ids = graph_dataset.train_node_ids
-        #test_node_ids = graph_dataset.test_node_ids
 
         if len(root_node) > 1:
             self.root = len(fullgraph.nodes)
@@ -327,9 +303,6 @@ class RawDataset(Dataset):
                 self.node2edge[node] = set(self.core_graph.in_edges(node)).union(set(self.core_graph.out_edges(node)))
 
             self.all_edges = list(self.get_candidate_positions(self.core_graph))
-
-        # else:
-        #     raise ValueError('invalid mode. mode should be either train or test.')
 
         end_time = time.time()
         print(f"Finish loading dataset ({end_time - start_time} seconds)")
@@ -471,8 +444,8 @@ class GraphDataset(RawDataset):
 
         # local subgraph
         # caching
-        self.cache = {}  # if g = self.cache[anchor_node], then g is the egonet centered on the anchor_node
-        self.cache_counter = {}  # if n = self.cache[anchor_node], then n is the number of times you used this cache
+        self.cache = {}  # if egonet centered on the anchor node
+        self.cache_counter = {}  # number of times you used this cache
 
         local_subgraph = dgl.DGLGraph()
         local_subgraph.add_nodes(1, {"id": torch.tensor([self.pseudo_leaf_node]), "pos": torch.tensor([1])})
@@ -614,14 +587,11 @@ class GraphDataset(RawDataset):
         add_edge_for_dgl(g, list(range(parent_node_idx)), parent_node_idx)
         add_edge_for_dgl(g, parent_node_idx, list(range(parent_node_idx + 1, len(nodes))))
 
-        # add self-cycle
-        g.add_edges(g.nodes(), g.nodes())
+        g.add_edges(g.nodes(), g.nodes()) # add self-cycle
 
         return g
 
 def add_edge_for_dgl(g, n1, n2):
-    """
-    https://github.com/dmlc/dgl/issues/1476 there is a bug in dgl add edges, so we need a wrapper
-    """
+
     if not ((isinstance(n1, list) and len(n1) == 0) or (isinstance(n2, list) and len(n2) == 0)):
         g.add_edges(n1, n2)

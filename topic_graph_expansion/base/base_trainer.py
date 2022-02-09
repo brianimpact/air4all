@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 from numpy import inf
 from abc import abstractmethod
 import copy
