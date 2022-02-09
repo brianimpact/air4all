@@ -25,7 +25,7 @@ class HiAGM(nn.Module):
             self.embedding_layer = nn.Identity()
         self.embedding_dropout = nn.Dropout(self.config.model.embedding.dropout)
         # RECURRENT LAYERS FOR TEXT ENCODING
-        if self.config.rnn.layernorm:
+        if self.config.model.rnn.layernorm:
             self.text_encoder_rnn = layernorm_gru.LayerNormGRU(
                 input_size=self.config.model.rnn.in_dimension,
                 hidden_size=self.config.model.rnn.out_dimension,
@@ -73,7 +73,7 @@ class HiAGM(nn.Module):
         else:
             lengths = batch[4]
         # RECURRENT LAYERS
-        if self.config.rnn.layernorm:
+        if self.config.model.rnn.layernorm:
             rnn_output = self.text_encoder_rnn(embedding, lengths)
         else:
             rnn_input = nn.utils.rnn.pack_padded_sequence(embedding, lengths, batch_first=True, enforce_sorted=False)

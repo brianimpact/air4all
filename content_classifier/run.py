@@ -15,7 +15,7 @@ from model import hiagm
 from utils.configuration import Configuration
 from utils.dataloader import HTCDataset, collate_fn
 from utils.file_and_ckpt import *
-from utils.loss import RecursiveRegularizationLoss, LabelContradictionPenalty
+from utils.loss import LabelContradictionPenalty, RecursiveRegularizationLoss
 from utils.metric import f1_scores
 
 
@@ -245,7 +245,8 @@ def train(config):
 
 if __name__ == "__main__":
     warnings.filterwarnings('ignore')
-    config_path = sys.argv[1]
+    # config_path = sys.argv[1]
+    config_path = '/home/jinhyun95/air4all/content_classifier/configs/focal_cntrpen_config.json'
     assert os.path.isfile(config_path), "CONFIGURATION FILE DOES NOT EXIST"
     with open(config_path, 'r') as fin:
         config = json.load(fin)

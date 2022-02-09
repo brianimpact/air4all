@@ -59,9 +59,9 @@
     "if_empty": "argmax_leaf"
   },
   "path": {
-    "checkpoints": "/data2/assets/jinhyun95/content_cls/checkpoints/220207_focal_cntrpen1e-4",
+    "checkpoints": "/data2/assets/jinhyun95/content_cls/checkpoints/debug_layernorm",
     "initial_checkpoint": "",
-    "log": "/data2/assets/jinhyun95/content_cls/logs/220207_focal_cntrpen1e-4.out",
+    "log": "/data2/assets/jinhyun95/content_cls/logs/debug_layernorm.out",
     "data": {
       "train": "/data2/assets/jinhyun95/content_cls/data/air4all_train.json",
       "val": "/data2/assets/jinhyun95/content_cls/data/air4all_val.json",
@@ -72,7 +72,7 @@
     }
   },
   "device":{
-    "cuda": [2, 3],
+    "cuda": [0],
     "num_workers": 1
   }
 }
