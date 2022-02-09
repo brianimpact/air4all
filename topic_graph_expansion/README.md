@@ -77,10 +77,7 @@ For topic graph expansion, your datasets need to be prepared and formatted accor
 
 - The configuration file will set all other configurations.
 
-    e.g. `python infer.py \
-    --resume <model save directory>/model_best.pth \
-    --taxo <new concept data directory>/new_concepts.txt \
-    --save <result save directory>/infer_result.tsv`
+    e.g. `python infer.py --resume <model save directory>/model_best.pth --taxo <new concept data directory>/new_concepts.txt --save <result save directory>/infer_result.tsv`
     
 ### 5. Requirements
 
