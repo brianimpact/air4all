@@ -1,0 +1,76 @@
+{
+    "name": "AI_topic_graph_expansion",
+    "path": "data/AI/ai.pickle.bin",
+    "n_gpu": 1,
+    "input_mode": "tg",
+    "architecture":{
+        "type": "MatchModel",
+        "trainer": "TMNTrainer",
+        "args": {
+            "graph_propagation_method": "PGAT",
+            "graph_readout_method": "WMR",
+            "matching_method": "TMN",
+            "k": 5,
+            "in_dim": 768,
+            "hidden_dim": 768,
+            "out_dim": 768,
+            "pos_dim": 150,
+            "num_layers": 1,
+            "heads": [4, 1],
+            "feat_drop": 0.1,
+            "attn_drop": 0.1,
+            "hidden_drop": 0.1,
+            "out_drop": 0.1
+        }
+    },
+    "train_data_loader": {
+        "type": "TaxoCompDataLoader",
+        "args":{
+            "batch_size": 32,
+            "sampling": 1,
+            "max_pos_size": 10,
+            "neg_size": 3,
+            "num_neighbors": 4,
+            "shuffle": true,
+            "drop_last": true,
+            "num_workers": 0,
+            "normalize_embed": false,
+            "cache_refresh_time": 16
+        }
+    },
+    "trainer": {
+        "l1": 1.0,
+        "l2": 1.0,
+        "l3": 1.0,
+
+        "epochs": 100,
+        "test_batch_size": 256,
+
+        "save_dir": "data/saved/AI/",
+        "save_period": 20,
+        "verbosity": 2,
+
+        "monitor": "max val_hit_at_10",
+        "early_stop": 10,
+        "grad_clip": -1
+    },
+    "loss": "bce_loss",
+    "metrics": ["macro_mean_rank", "micro_mean_rank", "hit_at_1", "hit_at_5", "hit_at_10", "scaled_mean_reciprocal_rank"],
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 0.001,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "lr_scheduler": {
+        "type": "ReduceLROnPlateau",
+        "args": {
+            "mode": "min",
+            "factor": 0.5,
+            "patience": 10,
+            "verbose": true
+        }
+    }
+}
