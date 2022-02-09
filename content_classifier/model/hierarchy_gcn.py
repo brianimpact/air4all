@@ -40,7 +40,7 @@ class HierarchyGCN(nn.Module):
         # GATE = SIGMOID(LINEAR(INPUT + BIAS))
         topdown_gate = self.topdown_fc(inputs + self.topdown_bias2)
         bottomup_gate = self.bottomup_fc(inputs + self.bottomup_bias2)
-        loop_gate = self.self.loop_fc(inputs)
+        loop_gate = self.loop_fc(inputs)
         
         if self.config.model.structure_encoder.layernorm:
             topdown_gate = self.ln_topdown_gate(topdown_gate)
