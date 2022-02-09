@@ -1,0 +1,74 @@
+{
+  "mode": "train",
+  "model": {
+    "embedding": {
+      "type": "allenai/scibert_scivocab_uncased",
+      "dimension": 768,
+      "dropout": 0.5,
+      "additional_layer": false
+    },
+    "rnn":{
+      "in_dimension": 768,
+      "out_dimension": 300,
+      "layers": 1,
+      "bidirectional": true,
+      "dropout": 0.1
+    },
+    "cnn": {
+      "kernels": [2, 3, 4],
+      "dimension": 100,
+      "pooling_k": 1
+    },
+    "structure_encoder": {
+      "dimension": 50,
+      "dropout": 0.05
+    },
+    "feature_aggregation": {
+      "dropout": 0.1
+    }
+  },
+  "training": {
+    "batch_size": 64,
+    "num_epochs": 200,
+    "max_text_length": 512,
+    "focal_loss": true,
+    "recursive_regularization_penalty": 0,
+    "label_contradiction_penalty":{
+      "weight": 1e-4,
+      "absolute": true,
+      "margin": 1e-2
+    },
+    "optimizer": {
+      "type": "Adam",
+      "learning_rate": 1e-4
+    },
+    "schedule": {
+      "patience": 5,
+      "decay": 0.1,
+      "early_stopping": 20,
+      "auto_save": 10
+    }
+  },
+  "postprocessing": {
+    "isolated_leaf": "remove",
+    "unfinished_path": "remove",
+    "if_empty": "argmax_leaf"
+  },
+  "path": {
+    "checkpoints": "/data2/assets/jinhyun95/content_cls/checkpoints/220207_focal_cntrpen1e-4",
+    "initial_checkpoint": "",
+    "log": "/data2/assets/jinhyun95/content_cls/logs/220207_focal_cntrpen1e-4.out",
+    "data": {
+      "train": "/data2/assets/jinhyun95/content_cls/data/air4all_train.json",
+      "val": "/data2/assets/jinhyun95/content_cls/data/air4all_val.json",
+      "test": "/data2/assets/jinhyun95/content_cls/data/air4all_test.json",
+      "labels": "/data2/assets/jinhyun95/content_cls/data/air4all_labels.json",
+      "prior": "/data2/assets/jinhyun95/content_cls/data/air4all_prior.json",
+      "hierarchy": "/data2/assets/jinhyun95/content_cls/data/air4all_hierarchy.tsv"
+    }
+  },
+  "device":{
+    "cuda": [2, 3],
+    "num_workers": 1
+  }
+}
