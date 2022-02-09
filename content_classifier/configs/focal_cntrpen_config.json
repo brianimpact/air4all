@@ -12,19 +12,23 @@
       "out_dimension": 300,
       "layers": 1,
       "bidirectional": true,
-      "dropout": 0.1
+      "dropout": 0.1,
+      "layernorm": true
     },
     "cnn": {
       "kernels": [2, 3, 4],
       "dimension": 100,
-      "pooling_k": 1
+      "pooling_k": 1,
+      "layernorm": true
     },
     "structure_encoder": {
       "dimension": 50,
-      "dropout": 0.05
+      "dropout": 0.05,
+      "layernorm": true
     },
     "feature_aggregation": {
-      "dropout": 0.1
+      "dropout": 0.1,
+      "layernorm": true
     }
   },
   "training": {
