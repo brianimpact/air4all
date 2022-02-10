@@ -38,9 +38,9 @@ Arguments of `run.py` are as follows:
     e.g. `['0) Scalars, Vectors,...nd Tensors', '1) Matrix Multiplication', ..., '1968) Imitation Learning']`
 
 - `abbreviation_list.xlsx` should be in `abb_path` and this file has the format as follows:
-\\`<first column - non_abb> : full study unit name which has abbreviaton`
-\\`<second column - abb1> : first abbreviation of full study unit name`
-\\`<third column - abb2> : second abbreviation of full study unit name, if it exists, or stay empty`
+`<first column - non_abb> : full study unit name which has abbreviaton`  
+`<second column - abb1> : first abbreviation of full study unit name`  
+`<third column - abb2> : second abbreviation of full study unit name, if it exists, or stay empty`  
 
     e.g. non_abb, abb1, abb2 
         `Multinoulli Distribution, Categorical Distribution, NaN`
