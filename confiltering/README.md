@@ -73,14 +73,14 @@ Arguments of `run.py` are as follows:
     e.g. `1) Matrix Multiplication`  
 
         - column :  
-            *content_id, matrix, multiplication, relevance*  
-            
+            content_id, matrix, multiplication, relevance  
+
         - value :  
-            *10, 1, 0, 0*  
-            *11, 0, 0, 0*  
+            10, 1, 0, 0  
+            11, 0, 0, 0  
             ⋮  
-            *898, 1, 1, 1*  
-            *1075, 1, 0, 0*  
+            898, 1, 1, 1  
+            1075, 1, 0, 0   
 
 ### 3. Training
 
