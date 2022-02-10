@@ -45,7 +45,7 @@ Arguments of `run.py` are as follows:
     e.g. non_abb, abb1, abb2  
         `Multinoulli Distribution, Categorical Distribution, NaN`  
         ⋮  
-        `Stochastic Gradient Descent, SGD, Stochastic GD'  
+        `Stochastic Gradient Descent, SGD, Stochastic GD`  
         ⋮  
 
 #### 2.2 Input/Output
@@ -54,7 +54,7 @@ Arguments of `run.py` are as follows:
 
 - Output : CSV file which includes whether to filter for each content index for study unit
 
-- transcripts should be in `transcript_path`, where each file in `transcript_path` has filename as follows:
+- transcripts should be in `transcript_path`, where each file in `transcript_path` has filename as follows:  
 `<study_unit_id>) <study_unit_name>.source`
     
     e.g. `0) Scalars, Vectors, Matrices and Tensors.source`
