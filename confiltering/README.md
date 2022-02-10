@@ -67,15 +67,16 @@ Arguments of `run.py` are as follows:
     
     e.g. `0) Scalars, Vectors, Matrices and Tensors.csv`
 
-- Results are CSV files that include content index, whether each words that consist of study unit name are filtered, and whether to filter for each content index for study unit.
-    
-    e.g. if study unit : `1) Matrix Multiplication`  
-        column : *content_id, matrix, multiplication, relevance*  
-        - 10,1,0,0  
-        - 11,0,0,0  
-        - ⋮  
-        - 898,1,1,1  
-        - 1075,1,0,0  
+- Results are CSV files, which include content indices, include whether each word consisting of study unit name is relevant to the corresponding content, and comprehensively whether to filter for each content for a study unit.    
+    e.g. `1) Matrix Multiplication`  
+        column :  
+            *content_id, matrix, multiplication, relevance*  
+        value :  
+            - *10, 1, 0, 0*  
+            - *11, 0, 0, 0*  
+            - ⋮  
+            - *898, 1, 1, 1*  
+            - *1075, 1, 0, 0*  
 
 ### 3. Training
 
