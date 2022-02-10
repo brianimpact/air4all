@@ -42,11 +42,11 @@ Arguments of `run.py` are as follows:
 `<second column - abb1> : first abbreviation of full study unit name`  
 `<third column - abb2> : second abbreviation of full study unit name, if it exists, or stay empty`  
 
-    e.g. non_abb, abb1, abb2 
-        `Multinoulli Distribution, Categorical Distribution, NaN`
-        ⋮
-        `Stochastic Gradient Descent, SGD, Stochastic GD'
-        ⋮
+    e.g. non_abb, abb1, abb2  
+        `Multinoulli Distribution, Categorical Distribution, NaN`  
+        ⋮  
+        `Stochastic Gradient Descent, SGD, Stochastic GD'  
+        ⋮  
 
 #### 2.2 Input/Output
 
@@ -69,13 +69,13 @@ Arguments of `run.py` are as follows:
 
 - Results are CSV files that include content index, whether each words that consist of study unit name are filtered, and whether to filter for each content index for study unit.
     
-    e.g. if study unit : `1) Matrix Multiplication`
-        content_id,matrix,multiplication,relevance
-        10,1,0,0
-        11,0,0,0
-        ⋮
-        898,1,1,1
-        1075,1,0,0
+    e.g. if study unit : `1) Matrix Multiplication`  
+        content_id,matrix,multiplication,relevance  
+        10,1,0,0  
+        11,0,0,0  
+        ⋮  
+        898,1,1,1  
+        1075,1,0,0  
 
 ### 3. Training
 
