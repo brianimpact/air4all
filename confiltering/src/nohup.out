@@ -1,0 +1,16 @@
+Namespace(abb_path='/data5/air4all/abbreviation_list.xlsx', category_vocab_size=50, db='air4all', db_host='147.46.95.120', db_password='imlab!39', db_user='imlab', doc_weight=2, low_frequency=0.001, making_category_vocab_file=True, match_threshold=30, pretrained_lm='allenai/scibert_scivocab_uncased', raw_doc_transcript_path='/data5/air4all/document_transcripts', raw_transcript_path='/data5/air4all/transcripts', temp_dir='/home/seokilee/air4all/contfiltering/src/dataset', top_pred_num=50, transcript_path='/data5/air4all/processed_transcripts', truncated_len='1')
+  0%|          | 0/1715 [00:00<?, ?it/s]====Scalars, Vectors, Matrices and Tensors====
+
+====0) Scalars, Vectors, Matrices and Tensors.source====
+
+youtube transcript 길이 : 24
+수기 수집 수 : 9
+  0%|          | 0/1715 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "run.py", line 97, in <module>
+    run()
+  File "run.py", line 74, in run
+    study_unit_name=name,abb=abb,non_unique_abb=non_unique_abb).save_processed_transcript(args.transcript_path)
+  File "/home/seokilee/air4all/confiltering/src/preprocessing.py", line 51, in __init__
+    self.included_abb,self.included_num,self.included_notchar,self.label_name_list = preprocess_label_names(self.study_unit_name)
+TypeError: preprocess_label_names() missing 1 required positional argument: 'abb'
