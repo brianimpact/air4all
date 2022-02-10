@@ -70,12 +70,12 @@ Arguments of `run.py` are as follows:
 - Results are CSV files that include content index, whether each words that consist of study unit name are filtered, and whether to filter for each content index for study unit.
     
     e.g. if study unit : `1) Matrix Multiplication`  
-        content_id,matrix,multiplication,relevance  
-        10,1,0,0  
-        11,0,0,0  
-        ⋮  
-        898,1,1,1  
-        1075,1,0,0  
+        *content_id,matrix,multiplication,relevance*  
+        - 10,1,0,0  
+        - 11,0,0,0  
+        - ⋮  
+        - 898,1,1,1  
+        - 1075,1,0,0  
 
 ### 3. Training
 
