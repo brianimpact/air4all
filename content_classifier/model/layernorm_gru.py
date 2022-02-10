@@ -33,10 +33,6 @@ class LayerNormGRUCell(nn.Module):
         for bias in [self.b_r, self.b_u, self.b_c]:
             nn.init.uniform_(bias, -self.hidden_size ** (-0.5), self.hidden_size ** (-0.5))
 
-        for ln in [self.ln_r_hidden, self.ln_r_input, self.ln_u_hidden, self.ln_u_input, self.ln_c_hidden, self.ln_c_input]:
-            nn.init.constant_(ln.weight, 0.1)
-            nn.init.constant_(ln.bias, 0.)
-
     def forward(self, x, h):
         reset_gate = F.sigmoid(self.ln_r_hidden(self.W_r(h)) + self.ln_r_input(self.U_r(x)) + self.b_r)
         update_gate = F.sigmoid(self.ln_u_hidden(self.W_u(h)) + self.ln_u_input(self.U_u(x)) + self.b_u)
