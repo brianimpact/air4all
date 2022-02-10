@@ -25,12 +25,12 @@ class HierarchyGCN(nn.Module):
         self.loop_fc = nn.Linear(self.in_dim, 1, bias=False)
 
         if self.config.model.structure_encoder.layernorm:
-            self.ln_topdown_gate = nn.LayerNorm([len(label_ids), 1])
-            self.ln_bottomup_gate = nn.LayerNorm([len(label_ids), 1])
-            self.ln_loop_gate = nn.LayerNorm([len(label_ids), 1])
-            self.ln_topdown_message = nn.LayerNorm([len(label_ids), self.in_dim])
-            self.ln_bottomup_message = nn.LayerNorm([len(label_ids), self.in_dim])
-            self.ln_loop_message = nn.LayerNorm([len(label_ids), self.in_dim])
+            self.ln_topdown_gate = nn.LayerNorm([len(label_ids), 1], elementwise_affine=False)
+            self.ln_bottomup_gate = nn.LayerNorm([len(label_ids), 1], elementwise_affine=False)
+            self.ln_loop_gate = nn.LayerNorm([len(label_ids), 1], elementwise_affine=False)
+            self.ln_topdown_message = nn.LayerNorm([len(label_ids), self.in_dim], elementwise_affine=False)
+            self.ln_bottomup_message = nn.LayerNorm([len(label_ids), self.in_dim], elementwise_affine=False)
+            self.ln_loop_message = nn.LayerNorm([len(label_ids), self.in_dim], elementwise_affine=False)
 
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(self.config.model.structure_encoder.dropout)

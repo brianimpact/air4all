@@ -14,7 +14,7 @@ class TextFeaturePropagation(nn.Module):
         self.linear_transformation = nn.Linear(self.config.model.cnn.pooling_k * self.config.model.cnn.dimension * len(self.config.model.cnn.kernels),
                                                len(self.label_ids) * self.config.model.structure_encoder.dimension)
         if self.config.model.feature_aggregation.layernorm:
-            self.layernorm = nn.LayerNorm(len(self.label_ids) * self.config.model.structure_encoder.dimension)
+            self.layernorm = nn.LayerNorm(len(self.label_ids) * self.config.model.structure_encoder.dimension, elementwise_affine=False)
         self.dropout = nn.Dropout(self.config.model.feature_aggregation.dropout)
         if self.config.training.recursive_regularization_penalty > 0:
             # INEFFICIENT CLASSIFIER DEFINED AS MODULE LIST (BUT IS QUITE EFFICIENT FOR RECURSIVE REGULARIZATION AS IT REDUCES TIME BY ~ 65%)

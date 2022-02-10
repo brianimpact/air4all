@@ -17,12 +17,12 @@ class LayerNormGRUCell(nn.Module):
         self.b_u = nn.Parameter(torch.empty((1, hidden_size)))
         self.b_c = nn.Parameter(torch.empty((1, hidden_size)))
         
-        self.ln_r_hidden = nn.LayerNorm(hidden_size)
-        self.ln_r_input = nn.LayerNorm(hidden_size)
-        self.ln_u_hidden = nn.LayerNorm(hidden_size)
-        self.ln_u_input = nn.LayerNorm(hidden_size)
-        self.ln_c_hidden = nn.LayerNorm(hidden_size)
-        self.ln_c_input = nn.LayerNorm(hidden_size)
+        self.ln_r_hidden = nn.LayerNorm(hidden_size, elementwise_affine=False)
+        self.ln_r_input = nn.LayerNorm(hidden_size, elementwise_affine=False)
+        self.ln_u_hidden = nn.LayerNorm(hidden_size, elementwise_affine=False)
+        self.ln_u_input = nn.LayerNorm(hidden_size, elementwise_affine=False)
+        self.ln_c_hidden = nn.LayerNorm(hidden_size, elementwise_affine=False)
+        self.ln_c_input = nn.LayerNorm(hidden_size, elementwise_affine=False)
 
         self.reset_parameters()
 

@@ -56,7 +56,7 @@ class HiAGM(nn.Module):
                 )
             )
             if self.config.model.cnn.layernorm:
-                self.layernorms.append(nn.LayerNorm(self.config.model.cnn.dimension))
+                self.layernorms.append(nn.LayerNorm(self.config.model.cnn.dimension, elementwise_affine=False))
         self.k = self.config.model.cnn.pooling_k
         # FEATURE AGGREGATION
         self.information_aggregation = text_feature_propagation.TextFeaturePropagation(self.config, self.label_ids)
