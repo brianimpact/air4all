@@ -70,7 +70,6 @@ Arguments of `run.py` are as follows:
 - Results are CSV files, which include content indices, include whether each word consisting of study unit name is relevant to the corresponding content, and comprehensively whether to filter for each content for a study unit.
 
 `0 : non-relevant, 1 : relevant`  
-
     e.g. `1) Matrix Multiplication`  
         - column :  
         *content_id, matrix, multiplication, relevance*  
