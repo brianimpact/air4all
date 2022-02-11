@@ -12,13 +12,13 @@ import num2words
 import copy
 
 class PreproSUTranscript(object):
-    def __init__(self,raw_transcript_path,raw_doc_transcript_path,file_name,remove_su_id, abb,non_unique_abb):
+    def __init__(self, raw_transcript_path, raw_doc_transcript_path, su_name, remove_su_id, abb, non_unique_abb):
         self.raw_transcript_path = raw_transcript_path
         self.raw_doc_trans_path = raw_doc_transcript_path
         self.study_unit_name = remove_su_id.lower()
         self.checking_abb = copy.deepcopy(abb)
         self.non_unique_abb = non_unique_abb
-        self.file_name = file_name
+        self.file_name = su_name + '.source'
         data_transcript = defaultdict()
         self.trans_idx = []
         data_path = os.path.join(self.raw_transcript_path,self.file_name)
@@ -226,8 +226,8 @@ class PreproSUTranscript(object):
             json.dump(data_transcript,f)
         print('done preprocess')
 
-# define file name and remove study unit index
-def file_remove_suid(transcript_path,study_unit_name):
+# remove study unit index
+def remove_suid(study_unit_name):
     search_name = study_unit_name
     if len(search_name.split('/')) > 1:
         if search_name == 'a/b testing':
@@ -235,23 +235,16 @@ def file_remove_suid(transcript_path,study_unit_name):
         else:
             search_name = search_name.replace('/',' ')
     search_name  = search_name.replace('–','-')
+    
+    remove_su_id = search_name.split(') ')
+    if len(remove_su_id) >= 3:
+        remove_su_id = ') '.join(search_name.split(') ')[1:]).lower()
+    elif len(remove_su_id) <3:
+        remove_su_id =  search_name.split(') ')[1].lower()
 
-    file_name = ''
-    remove_su_id = 'None'
-    file_list = os.listdir(transcript_path)
-    for i in file_list:
-        without_source = '.'.join(i.split('.')[:-1])
-        if without_source == search_name:
-            file_name = i
-            remove_su_id = without_source.split(') ')
-            if len(remove_su_id) >= 3:
-                remove_su_id = ') '.join(without_source.split(') ')[1:]).lower()
-            elif len(remove_su_id) <3:
-                remove_su_id =  without_source.split(') ')[1].lower()
-            break
-    if file_name == '':
+    if remove_su_id == 'None':
         warnings.warn(f'There is no transcripts related to {study_unit_name}')
-    return file_name, remove_su_id
+    return remove_su_id
 
 # preprocessing label name
 def preprocess_su_name(su_name,abb):
