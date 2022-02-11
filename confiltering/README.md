@@ -47,7 +47,7 @@ Arguments of `run.py` are as follows:
 
     - In a file, a dictionary consists of content indices and corresponding transcripts. If the content is manually collected content, its content index will be a negative content index, while the youtube transcript has a positive content index.
         
-        e.g. `{1: "welcome back to this series...", 2: "in this video we will",...,-2: "matrices and vectors linear algebra review",...}`
+        e.g. `{1: "welcome back to this series...", 2: "in this video we will",...,-2: "matrices and vectors",...}`
 
 
 - Output : CSV file which includes whether to filter for each content index for study unit
