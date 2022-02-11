@@ -16,7 +16,6 @@ Arguments of `run.py` are as follows:
 - `--raw_transcript_path`: directory of youtube raw transcripts (str)
 - `--raw_doc_transcript_path`: directory of raw manually collected document transcripts (str)
 - `--transcript_path`: directory of the preprocessed transcripts (str)
-- `--abb_path`: directory of study unit's abbreviation excel file (str)
 - `--pretrained_lm`: pretrained language model (str)
 - `--top_pred_num`: language model MLM top prediction cutoff (int)
 - `--category_vocab_size`: size of category vocabulary for each study unit (int)
@@ -30,23 +29,12 @@ Arguments of `run.py` are as follows:
 
 ### 2. Data
 
-#### 2.1 Study Unit List & Abbreviation List
+#### 2.1 Study Unit List
 
 - `study_unit_list` should be in `temp_dir` and this file has the format as follows:
 `[<study_unit_id>) <study_unit_name>, ...]`
 
     e.g. `['0) Scalars, Vectors,...nd Tensors', '1) Matrix Multiplication', ..., '1968) Imitation Learning']`
-
-- `abbreviation_list.xlsx` should be in `abb_path` and this file has the format as follows:  
-`<first column - non_abb> : full study unit name which has abbreviaton or synonym`  
-`<second column - abb1> : first abbreviation of full study unit name`  
-`<third column - abb2> : second abbreviation of full study unit name, if it exists, or stay empty`  
-
-    e.g. non_abb, abb1, abb2  
-        `Multinoulli Distribution, Categorical Distribution, NaN`  
-        ⋮  
-        `Stochastic Gradient Descent, SGD, Stochastic GD`  
-        ⋮  
 
 #### 2.2 Input/Output
 
@@ -70,7 +58,7 @@ Arguments of `run.py` are as follows:
 - Results are CSV files, which include content indices, include whether each word consisting of study unit name is relevant to the corresponding content, and comprehensively whether to filter for each content for a study unit.
 
 `0 : non-relevant, 1 : relevant`  
-    e.g. `1) Matrix Multiplication`  
+    e.g. `1) Matrix Multiplication.csv`  
 
         - column :  
             content_id, matrix, multiplication, relevance  

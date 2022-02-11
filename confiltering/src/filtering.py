@@ -86,14 +86,13 @@ class Filtering:
         self.document_category_word_freq = {word: defaultdict(float) for word in self.words}
         self.only_youtube_category_word_freq = {word: defaultdict(float) for word in self.words}
         self.category_vocab = {}
-        self.document_category_word = {}
-        self.only_youtube_category_word = {}
+        self.only_manually_cate_vocab = {}
+        self.only_youtube_cate_vocab = {}
         sorted_res_dict = defaultdict(dict)
         for z in range(len(self.words)):
             word = self.words[z]
-            #word_sep_dataset
-            word_sep_dataset = word_sep_dataset[word]
-            for batch in word_sep_dataset:
+            one_word_dataset = word_sep_dataset[word]
+            for batch in one_word_dataset:
                 trans_idx = batch[3]
                 if trans_idx < 0:
                     weight = doc_weight
@@ -114,13 +113,30 @@ class Filtering:
                     _, sorted_res = torch.topk(predictions[match_idx_label], top_pred_num, dim=-1)
                     sorted_res_dict[trans_idx][word] = sorted_res
 
+                    # for both manually collected transcript and youtube transcript category vocabulary
                     for word_list in sorted_res: 
                         for word_id in word_list: 
                             self.category_words_freq[word][word_id.item()] += (1*weight)
+                    # only for manually collected transcript category vocabulary
+                    if trans_idx < 0:
+                        for word_list in sorted_res: 
+                            for word_id in word_list:
+                                self.document_category_word_freq[word][word_id.item()]
+                    # only for youtube transcript category vocabulary
+                    elif trans_idx > 0:
+                        for word_list in sorted_res: 
+                            for word_id in word_list:
+                                self.only_youtube_category_word_freq[word][word_id.item()]
 
             category_words = self.filter_stopwords(self.category_words_freq[word])
             self.category_vocab[word] = category_words
-        
+            
+            doc_category_words = self.filter_stopwords(self.document_category_word_freq[word])
+            self.only_manually_cate_vocab[word] = doc_category_words
+
+            only_youtube_category_words = self.filter_stopwords(self.only_youtube_category_word_freq[word])
+            self.only_youtube_cate_vocab[word] = only_youtube_category_words
+
         #classification
         relevant_idx = defaultdict(list)
         label_predict_voca = defaultdict()
@@ -148,5 +164,5 @@ class Filtering:
 
         for label, category_vocab in self.category_vocab.items():
             print(f"{label}'s category vocabulary: {[self.inv_vocab[w] for w in category_vocab]}")      
-        return self.words, relevant_idx, self.category_vocab, self.cal_freq
+        return self.words, relevant_idx, self.category_vocab, self.cal_freq, self.only_manually_cate_vocab, self.only_youtube_cate_vocab
     
