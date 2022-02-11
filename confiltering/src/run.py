@@ -64,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument('--truncated_len',default=100,help='length that documents are padded/truncated to, one unit means 512 length of tokens, 100 -> 512*100')
     parser.add_argument('--num_word_threshold',default=3,help='how many words are related to classify whether transcript is relevant')
     parser.add_argument('--saving_category_vocab_file',default=True,help='save category vocabulary file')
-    parser.add_argument('--out_path',default='/home/seokilee/air4all/confiltering/dataset/filtering_doc',help='path of saving filter-in content index')
+    parser.add_argument('--out_path',default=None,help='path of saving filter-in content index')
     args = parser.parse_args()
     
     print(args)
