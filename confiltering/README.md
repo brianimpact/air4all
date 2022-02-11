@@ -74,7 +74,7 @@ Arguments of `run.py` are as follows:
 
 - This task should be unsupervised learning, so training is not required.
 
-- Use pre-trained language model MLM to form the category vocabulary.
+- We use pre-trained [SCIBERT: A Pretrained Language Model for Scientific Text (Beltagy et al., EMNLP 2019)](https://aclanthology.org/D19-1371.pdf) language model MLM to form the category vocabulary.  
 
 ### 4. Requirements
 
