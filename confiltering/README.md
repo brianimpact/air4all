@@ -42,33 +42,34 @@ Arguments of `run.py` are as follows:
 
 - Output : CSV file which includes whether to filter for each content index for study unit
 
-- transcripts should be in `transcript_path`, where each file in `transcript_path` has filename as follows:  
-`<study_unit_id>) <study_unit_name>.source`
-    
-    e.g. `0) Scalars, Vectors, Matrices and Tensors.source`
 
-- In a file, a dictionary consists of content indices and corresponding transcripts. If the content is manually collected content, its content index will be a negative content index, while the youtube transcript has a positive content index.
-    
-    e.g. `{1: "welcome back to this series...", 2: "in this video we will",...,-2: "matrices and vectors linear algebra review",...}`
+    - transcripts should be in `transcript_path`, where each file in `transcript_path` has filename as follows:  
+    `<study_unit_id>) <study_unit_name>.source`
+        
+        e.g. `0) Scalars, Vectors, Matrices and Tensors.source`
 
-- Results of `run.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
-    
-    e.g. `0) Scalars, Vectors, Matrices and Tensors.csv`
+    - In a file, a dictionary consists of content indices and corresponding transcripts. If the content is manually collected content, its content index will be a negative content index, while the youtube transcript has a positive content index.
+        
+        e.g. `{1: "welcome back to this series...", 2: "in this video we will",...,-2: "matrices and vectors linear algebra review",...}`
 
-- Results are CSV files, which include content indices, include whether each word consisting of study unit name is relevant to the corresponding content, and comprehensively whether to filter for each content for a study unit.
+    - Results of `run.py` are saved in `out_path` with filename like the files in `data_path`, but with different extension.
+        
+        e.g. `0) Scalars, Vectors, Matrices and Tensors.csv`
 
-`0 : non-relevant, 1 : relevant`  
-    e.g. `1) Matrix Multiplication.csv`  
+    - Results are CSV files, which include content indices, include whether each word consisting of study unit name is relevant to the corresponding content, and comprehensively whether to filter for each content for a study unit.
 
-        - column :  
-            content_id, matrix, multiplication, relevance  
+    `0 : non-relevant, 1 : relevant`  
+        e.g. `1) Matrix Multiplication.csv`  
 
-        - value :  
-            10, 1, 0, 0  
-            11, 0, 0, 0  
-            ⋮  
-            898, 1, 1, 1  
-            1075, 1, 0, 0   
+            - column :  
+                content_id, matrix, multiplication, relevance  
+
+            - value :  
+                10, 1, 0, 0  
+                11, 0, 0, 0  
+                ⋮  
+                898, 1, 1, 1  
+                1075, 1, 0, 0   
 
 ### 3. Training
 
