@@ -10,8 +10,13 @@ class HierarchyGCN(nn.Module):
         # top_down_prior[parent][child] = P and bottom_up_prior[child][parent] = 1.
         self.config = config
         topdown_prior, bottomup_prior = read_prior(self.config, label_ids)
-        self.register_buffer('topdown_prior', torch.tensor(topdown_prior, dtype=torch.float32, requires_grad=False))
-        self.register_buffer('bottomup_prior', torch.tensor(bottomup_prior, dtype=torch.float32, requires_grad=False))
+        if self.config.model.structure_encoder.trainable_prior:
+            self.topdown_prior = nn.Parameter(torch.tensor(topdown_prior, dtype=torch.float32))
+            self.bottomup_prior = nn.Parameter(torch.tensor(bottomup_prior, dtype=torch.float32))
+        else:
+            self.register_buffer('topdown_prior', torch.tensor(topdown_prior, dtype=torch.float32, requires_grad=False))
+            self.register_buffer('bottomup_prior', torch.tensor(bottomup_prior, dtype=torch.float32, requires_grad=False))
+
         self.in_dim = self.config.model.structure_encoder.dimension
         # TOPDOWN GCN
         self.topdown_bias1 = nn.Parameter(torch.zeros([1, len(label_ids), self.in_dim], dtype=torch.float32))

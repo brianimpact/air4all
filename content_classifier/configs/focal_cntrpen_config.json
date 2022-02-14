@@ -24,7 +24,8 @@
     "structure_encoder": {
       "dimension": 50,
       "dropout": 0.05,
-      "layernorm": true
+      "layernorm": true,
+      "trainable_prior": true
     },
     "feature_aggregation": {
       "dropout": 0.1,
