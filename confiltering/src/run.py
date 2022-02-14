@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument('--match_threshold',default=30, type=int, help='matching threshold whether each transcript is relevant to study unit')
     parser.add_argument('--low_frequency',default=0.001, type=float, help='criteria for filtering out lower-frequency')
     parser.add_argument('--doc_weight', default=2, type=int, help='define how much affect manually collected document to create category vocabulary')
-    parser.add_argument('--truncated_len',default=100, type=int, help='length that documents are padded/truncated to, one unit means 512 length of tokens, 100 -> 512*100')
+    parser.add_argument('--truncated_len',default=100, type=int, help='length that transcripts are padded/truncated to, one unit means 512 length of tokens, 100 -> 512*100')
     parser.add_argument('--num_word_threshold',default=3, type=int, help='how many words are related to classify whether transcript is relevant')
     parser.add_argument('--saving_category_vocab_file',default=True,help='save category vocabulary file')
     parser.add_argument('--out_path',default=None,help='path of saving filter-in content index')
