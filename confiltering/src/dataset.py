@@ -18,7 +18,7 @@ class SUdataset(object):
         self.vocab = self.tokenizer.get_vocab()
         self.max_len = 512
         self.truncated_len = truncated_len
-        data_path = os.path.join(transcript_path,file_su_name)
+        data_path = os.path.join(transcript_path,file_su_name + '.source')
         with open(data_path,'r') as f:
             self.data_transcript = json.load(f)
         self.read_data(self.temp_dir)
