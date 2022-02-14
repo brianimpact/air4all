@@ -122,9 +122,8 @@ def making_abb_list():
 def remove_slash(name):
     search_name = name
     if len(search_name.split('/')) > 1:
-        if search_name == 'a/b testing':
+        if search_name == '1606) A/B Testing':
             search_name = search_name.replace('/','')
         else:
             search_name = search_name.replace('/',' ')
-    search_name  = search_name.replace('–','-')
     return search_name

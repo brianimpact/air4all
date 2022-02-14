@@ -45,6 +45,11 @@ Arguments of `run.py` are as follows:
         
         e.g. `0) Scalars, Vectors, Matrices and Tensors.source`
 
+    - If  `/` is in study unit name, you should replace it with whiteshpace. 
+
+        e.g. `1195) Basic Input/Output System (BIOS).source` ==> `1195) Basic Input Output System (BIOS).source`  
+            (except for `1606) A/B Testing.source` ==> `1606) AB Testing.source`)
+
     - In a file, a dictionary consists of content indices and corresponding transcripts. If the content is manually collected content, its content index will be a negative content index, while the youtube transcript has a positive content index.
         
         e.g. `{1: "welcome back to this series...", 2: "in this video we will",...,-2: "matrices and vectors",...}`

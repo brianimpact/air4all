@@ -230,7 +230,7 @@ class PreproSUTranscript(object):
 def remove_suid(study_unit_name):
     search_name = study_unit_name
     if len(search_name.split('/')) > 1:
-        if search_name == 'a/b testing':
+        if search_name == '1606) A/B Testing':
             search_name = search_name.replace('/','')
         else:
             search_name = search_name.replace('/',' ')
@@ -261,8 +261,6 @@ def preprocess_su_name(su_name,abb):
             su_name = su_name.replace('/','')
         else:
             su_name = su_name.replace('/',' ')
-    su_name  = su_name.replace('–','-')
-    su_name = su_name.replace('naïve','naive')
 
     special_char = {'++' : 'plus plus', '*' : 'star','ⅰ':'one','ⅱ':'two','λ':'lambda'}
     not_chars = re.findall('[^a-zA-Z0-9_,()\' :\-]+',su_name)
