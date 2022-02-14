@@ -92,7 +92,7 @@ def extract_relevant_idx(out_path, transcript_path, file_su_name, label_words, r
     data_transcript.to_csv(out_path_su)
 
 # making category vocabulary file
-def saving_category_vocabulary_file(temp_dir,file_su_name,category_vocab, only_manually_cate_vocab, only_youtube_cate_vocab):
+def saving_category_vocabulary_file(temp_dir, file_su_name, category_vocab, only_manually_cate_vocab, only_youtube_cate_vocab):
     category_data_path = temp_dir+'/category_vocabulary'
     vocab_loader_name="category_vocab.pt"
     vocab_save_file = os.path.join(category_data_path, f"{file_su_name}_"+vocab_loader_name)
@@ -119,6 +119,27 @@ def making_abb_list():
                 non_unique_abb[i] = abb_sorted[i]
         return abb_sorted, non_unique_abb
 
+# remove study unit index
+def remove_suid(study_unit_name):
+    search_name = study_unit_name
+    if len(search_name.split('/')) > 1:
+        if search_name == '1606) A/B Testing':
+            search_name = search_name.replace('/','')
+        else:
+            search_name = search_name.replace('/',' ')
+    search_name  = search_name.replace('–','-')
+    
+    remove_su_id = search_name.split(') ')
+    if len(remove_su_id) >= 3:
+        remove_su_id = ') '.join(search_name.split(') ')[1:]).lower()
+    elif len(remove_su_id) <3:
+        remove_su_id =  search_name.split(') ')[1].lower()
+
+    if remove_su_id == 'None':
+        warnings.warn(f'There is no transcripts related to {study_unit_name}')
+    return remove_su_id
+
+# remove / in study unit name
 def remove_slash(name):
     search_name = name
     if len(search_name.split('/')) > 1:

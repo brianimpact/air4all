@@ -7,7 +7,7 @@ class SUClassModel(BertPreTrainedModel):
         self.num_labels = config.num_labels
         self.bert = BertModel(config, add_pooling_layer=False)
         self.cls = BertOnlyMLMHead(config)
-        # MLM head is not trained
+        # Not training MLM head 
         for param in self.cls.parameters():
             param.requires_grad = False
         self.init_weights()

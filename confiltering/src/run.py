@@ -5,16 +5,16 @@ import argparse
 from torch.nn import DataParallel
 import torch
 import json
-from utils import extract_relevant_idx,saving_category_vocabulary_file,making_abb_list,remove_slash
-from preprocessing import PreproSUTranscript,preprocess_su_name,remove_suid
+from utils import extract_relevant_idx, saving_category_vocabulary_file, making_abb_list, remove_slash, remove_suid
+from preprocessing import PreproSUTranscript, preprocess_su_name
 from model import SUClassModel
 from dataset import SUdataset
 from filtering import Filtering
 
 
 def preprocess_transcript(args):
-    study_unit_list_path = os.path.join(args.temp_dir,'study_unit_list')
-    with open(study_unit_list_path,'r') as f:
+    study_unit_list_path = os.path.join(args.temp_dir, 'study_unit_list')
+    with open(study_unit_list_path, 'r') as f:
         file_list = json.load(f)
     #create abbrevation
     abb, non_unique_abb = making_abb_list()
@@ -29,7 +29,7 @@ def preprocess_transcript(args):
             remove_su_id=remove_su_id, abb=abb, non_unique_abb=non_unique_abb).save_processed_transcript(args.transcript_path)
 
 def run(args):
-    study_unit_list_path = os.path.join(args.temp_dir,'study_unit_list')
+    study_unit_list_path = os.path.join(args.temp_dir, 'study_unit_list')
     with open(study_unit_list_path,'r') as f:
         file_list = json.load(f)
     #create abbrevation
@@ -45,14 +45,14 @@ def run(args):
         file_name = remove_slash(name)
         if os.path.exists(f'{args.temp_dir}/category_vocabulary/{file_name}_category_vocab.pt') == False:
             print(f'{file_name}')
-            included_abb,_,_,_,preprocessed_label_name = preprocess_su_name(remove_su_id,abb)
+            included_abb, _, _, _, preprocessed_label_name = preprocess_su_name(remove_su_id,abb)
             print('words that consist label :', preprocessed_label_name)
             #create dataset
             data = SUdataset(args.temp_dir, args.transcript_path, file_name, preprocessed_label_name, args.pretrained_lm, args.truncated_len)
             #filtering
-            label_words, relevant_idx, category_vocab, cal_freq, only_manually_cate_vocab, only_youtube_cate_vocab = Filtering(data,args.temp_dir,included_abb,
-                                            args.category_vocab_size).making_catevoca_and_classification(model,top_pred_num=args.top_pred_num,
-                                            match_threshold=args.match_threshold,doc_weight=args.doc_weight)
+            label_words, relevant_idx, category_vocab, cal_freq, only_manually_cate_vocab, only_youtube_cate_vocab = Filtering(data,args.temp_dir, included_abb,
+                                            args.category_vocab_size).making_catevoca_and_classification(model, top_pred_num=args.top_pred_num,
+                                            match_threshold=args.match_threshold, doc_weight=args.doc_weight)
             #saving results
             extract_relevant_idx(args.out_path, args.transcript_path, file_name, label_words, relevant_idx, cal_freq, included_abb, num_word_threshold=args.num_word_threshold, low_frequency=args.low_frequency)
             if args.saving_category_vocab_file == True:

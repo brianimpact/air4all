@@ -21,7 +21,7 @@ class PreproSUTranscript(object):
         self.file_name = file_name + '.source'
         data_transcript = defaultdict()
         self.trans_idx = []
-        data_path = os.path.join(self.raw_transcript_path,self.file_name)
+        data_path = os.path.join(self.raw_transcript_path, self.file_name)
         with open(data_path, 'r') as f:
             infos = f.readlines()
             for temp_info in infos:
@@ -36,7 +36,7 @@ class PreproSUTranscript(object):
         count = -1
         length = 0
         if os.path.exists(self.raw_doc_trans_path+'/'+self.file_name):
-            data_path = os.path.join(self.raw_doc_trans_path,self.file_name)
+            data_path = os.path.join(self.raw_doc_trans_path, self.file_name)
             with open(data_path,'r') as f:
                 infos = f.readlines()
                 for manual_trans in infos[:-1]:
@@ -47,10 +47,10 @@ class PreproSUTranscript(object):
         print(f'the number of manually collected transcripts : {length}')
         
         self.data_transcript = data_transcript
-        self.included_abb,self.included_num,self.included_notchar,self.not_chars,self.label_name_list = preprocess_su_name(remove_su_id,abb)
+        self.included_abb, self.included_num, self.included_notchar, self.not_chars, self.label_name_list = preprocess_su_name(remove_su_id, abb)
 
     # change abbreviation that is in the transcript to the full name
-    def chagne_abb2full(self,transcript):
+    def chagne_abb2full(self, transcript):
         transcript = transcript.strip()
         transcript = ' ' + transcript + ' '
         special_char = {'++' : 'plus plus', '*' : 'star','ⅰ':'one','ⅱ':'two','λ':'lambda'}
@@ -71,7 +71,7 @@ class PreproSUTranscript(object):
         return transcript
     
     # preprocessing transcripts
-    def pre_process(self,transcript):
+    def pre_process(self, transcript):
         transcript = transcript[0]
         transcript = re.sub('\n',' ',transcript)
 
@@ -215,7 +215,7 @@ class PreproSUTranscript(object):
         return ' '.join(words)
     
     # saving preprocessed transcripts
-    def save_processed_transcript(self,out_path):
+    def save_processed_transcript(self, out_path):
         print('start preprocess')
         data_transcript = defaultdict()
         for trans_idx, trans in self.data_transcript.items():
@@ -225,26 +225,6 @@ class PreproSUTranscript(object):
         with open(data_path,'w') as f:
             json.dump(data_transcript,f)
         print('done preprocess')
-
-# remove study unit index
-def remove_suid(study_unit_name):
-    search_name = study_unit_name
-    if len(search_name.split('/')) > 1:
-        if search_name == '1606) A/B Testing':
-            search_name = search_name.replace('/','')
-        else:
-            search_name = search_name.replace('/',' ')
-    search_name  = search_name.replace('–','-')
-    
-    remove_su_id = search_name.split(') ')
-    if len(remove_su_id) >= 3:
-        remove_su_id = ') '.join(search_name.split(') ')[1:]).lower()
-    elif len(remove_su_id) <3:
-        remove_su_id =  search_name.split(') ')[1].lower()
-
-    if remove_su_id == 'None':
-        warnings.warn(f'There is no transcripts related to {study_unit_name}')
-    return remove_su_id
 
 # preprocessing label name
 def preprocess_su_name(su_name,abb):
@@ -273,7 +253,7 @@ def preprocess_su_name(su_name,abb):
                     su_name = su_name.replace(not_char,' '+special_char[not_char])
                 else:
                     su_name = su_name.replace(not_char,special_char[not_char])
-    if su_name == 'b- tree' or su_name == 'b-tree':
+    if su_name == 'b- tree':
         su_name = su_name.replace('-','minus ')
 
     su_name = ' '+su_name+' '
