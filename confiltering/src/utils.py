@@ -6,7 +6,7 @@ from collections import defaultdict
 import json
 
 # create a file for the result of filtering
-def extract_relevant_idx(out_path, transcript_path, file_su_name, su_names, relevant_idx, cal_freq, included_abb, num_word_threshold=3, low_frequency=0.001):
+def extract_relevant_idx(out_path, transcript_path, file_su_name, label_words, relevant_idx, cal_freq, included_abb, num_word_threshold=3, low_frequency=0.001):
     data_transcript = []
     add_source_term_file_name = file_su_name + '.source'
     data_path = os.path.join(transcript_path,add_source_term_file_name)
@@ -19,7 +19,7 @@ def extract_relevant_idx(out_path, transcript_path, file_su_name, su_names, rele
     data_transcript = pd.DataFrame(data_transcript,columns=['content_id'])
     
     non_label = 0
-    for word in su_names:
+    for word in label_words:
         if word in relevant_idx.keys():
             add_colum_value = []
             one_word_relevant_idx = relevant_idx[word]
@@ -38,16 +38,16 @@ def extract_relevant_idx(out_path, transcript_path, file_su_name, su_names, rele
     data_transcript['relevance'] = 0
     for idx in data_transcript.index:
         cont = 0
-        for word in su_names:
+        for word in label_words:
             if word in data_transcript.columns:
                 if data_transcript[word][idx] == 1:
                     cont += 1
 
-        if len(su_names) <= num_word_threshold or included_abb == True:
-            if cont == len(su_names):
+        if len(label_words) <= num_word_threshold or included_abb == True:
+            if cont == len(label_words):
                 data_transcript['relevance'][idx] = 1
         else:
-            if cont >= len(su_names) - 1:
+            if cont >= len(label_words) - 1:
                 data_transcript['relevance'][idx] = 1
     
     # filtering out the low-frequency-label transcript
@@ -118,3 +118,13 @@ def making_abb_list():
             if len(abb_sorted[i]) > 1:
                 non_unique_abb[i] = abb_sorted[i]
         return abb_sorted, non_unique_abb
+
+def remove_slash(name):
+    search_name = name
+    if len(search_name.split('/')) > 1:
+        if search_name == 'a/b testing':
+            search_name = search_name.replace('/','')
+        else:
+            search_name = search_name.replace('/',' ')
+    search_name  = search_name.replace('–','-')
+    return search_name

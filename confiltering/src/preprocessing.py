@@ -12,13 +12,13 @@ import num2words
 import copy
 
 class PreproSUTranscript(object):
-    def __init__(self, raw_transcript_path, raw_doc_transcript_path, su_name, remove_su_id, abb, non_unique_abb):
+    def __init__(self, raw_transcript_path, raw_doc_transcript_path, file_name, remove_su_id, abb, non_unique_abb):
         self.raw_transcript_path = raw_transcript_path
         self.raw_doc_trans_path = raw_doc_transcript_path
         self.study_unit_name = remove_su_id.lower()
         self.checking_abb = copy.deepcopy(abb)
         self.non_unique_abb = non_unique_abb
-        self.file_name = su_name + '.source'
+        self.file_name = file_name + '.source'
         data_transcript = defaultdict()
         self.trans_idx = []
         data_path = os.path.join(self.raw_transcript_path,self.file_name)

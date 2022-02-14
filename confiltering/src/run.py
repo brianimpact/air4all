@@ -5,13 +5,14 @@ import argparse
 from torch.nn import DataParallel
 import torch
 import json
-from utils import extract_relevant_idx,saving_category_vocabulary_file,making_abb_list
+from utils import extract_relevant_idx,saving_category_vocabulary_file,making_abb_list,remove_slash
 from preprocessing import PreproSUTranscript,preprocess_su_name,remove_suid
 from model import SUClassModel
 from dataset import SUdataset
 from filtering import Filtering
 
-def run(args):
+
+def preprocess_transcript(args):
     study_unit_list_path = os.path.join(args.temp_dir,'study_unit_list')
     with open(study_unit_list_path,'r') as f:
         file_list = json.load(f)
@@ -21,11 +22,18 @@ def run(args):
     #save prerprocessed data
     for name in tqdm(file_list):
         remove_su_id = remove_suid(name)
-        if os.path.exists(f'{args.transcript_path}/{name}') == False:
-            print(f'{name}')
-            PreproSUTranscript(raw_transcript_path=args.raw_transcript_path, raw_doc_transcript_path=args.raw_doc_transcript_path, su_name = name,
+        file_name = remove_slash(name)
+        if os.path.exists(f'{args.transcript_path}/{file_name}.source') == False:
+            print(f'{file_name}')
+            PreproSUTranscript(raw_transcript_path=args.raw_transcript_path, raw_doc_transcript_path=args.raw_doc_transcript_path, file_name = file_name,
             remove_su_id=remove_su_id, abb=abb, non_unique_abb=non_unique_abb).save_processed_transcript(args.transcript_path)
-    
+
+def run(args):
+    study_unit_list_path = os.path.join(args.temp_dir,'study_unit_list')
+    with open(study_unit_list_path,'r') as f:
+        file_list = json.load(f)
+    #create abbrevation
+    abb,_ = making_abb_list()
     #define model
     model = SUClassModel.from_pretrained(args.pretrained_lm, output_attentions=False, output_hidden_states=False, num_labels=2)
     if torch.cuda.is_available():
@@ -34,20 +42,21 @@ def run(args):
     #filtering
     for name in tqdm(file_list):
         remove_su_id = remove_suid(name)
-        if os.path.exists(f'{args.temp_dir}/category_vocabulary/{name}_category_vocab.pt') == False:
-            print(f'{name}')
+        file_name = remove_slash(name)
+        if os.path.exists(f'{args.temp_dir}/category_vocabulary/{file_name}_category_vocab.pt') == False:
+            print(f'{file_name}')
             included_abb,_,_,_,preprocessed_label_name = preprocess_su_name(remove_su_id,abb)
             print('words that consist label :', preprocessed_label_name)
             #create dataset
-            data = SUdataset(args.temp_dir, args.transcript_path, name, preprocessed_label_name, args.pretrained_lm, args.truncated_len)
+            data = SUdataset(args.temp_dir, args.transcript_path, file_name, preprocessed_label_name, args.pretrained_lm, args.truncated_len)
             #filtering
-            su_names, relevant_idx, category_vocab, cal_freq, only_manually_cate_vocab, only_youtube_cate_vocab = Filtering(data,args.temp_dir,included_abb,
+            label_words, relevant_idx, category_vocab, cal_freq, only_manually_cate_vocab, only_youtube_cate_vocab = Filtering(data,args.temp_dir,included_abb,
                                             args.category_vocab_size).making_catevoca_and_classification(model,top_pred_num=args.top_pred_num,
                                             match_threshold=args.match_threshold,doc_weight=args.doc_weight)
             #saving results
-            extract_relevant_idx(args.out_path, args.transcript_path, name, su_names, relevant_idx, cal_freq, included_abb, num_word_threshold=args.num_word_threshold, low_frequency=args.low_frequency)
+            extract_relevant_idx(args.out_path, args.transcript_path, file_name, label_words, relevant_idx, cal_freq, included_abb, num_word_threshold=args.num_word_threshold, low_frequency=args.low_frequency)
             if args.saving_category_vocab_file == True:
-                saving_category_vocabulary_file(args.temp_dir, name, category_vocab, only_manually_cate_vocab, only_youtube_cate_vocab)
+                saving_category_vocabulary_file(args.temp_dir, file_name, category_vocab, only_manually_cate_vocab, only_youtube_cate_vocab)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='run', formatter_class=argparse.ArgumentDefaultsHelpFormatter) 
