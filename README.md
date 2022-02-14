@@ -25,7 +25,11 @@ Content Classifier는 학습 자료를 해당하는 학습 주제들과 학습 �
 
 ### 학습 주제 그래프 확장 모듈(Topic Graph Expansion)
 Topic Graph Expansion Module은 새로운 개념(학습 주제 또는 학습 단위)이 추가될 때 이를 기존 학습 주제 그래프에 통합하여 확장합니다. 
-서비스의 커버리지를 확장하여 최신 주제가 반영된 로드맵에서 학습할 수 있도록 보조합니다.
+서비스의 커버리지를 확장하여 최신 학습 주제가 반영된 로드맵에서 학습할 수 있도록 보조합니다.
+
+### 학습 자료 필터링 모듈(Content Filtering)
+Content Filtering은 각 AI 관련 세부 주제(학습 단위)에 대해 자동 크롤링한 영문 유튜브 영상 중 관련 없는 유튜브 영상 학습 자료를 필터링합니다.
+각 학습 단위에 대한 무관한 영문 영상 자료가 서비스에 포함되지 않도록 하는 역할을 합니다.
 
 <br>
 
@@ -49,3 +53,7 @@ Content Classifier labels each study material (content) with corresponding AI-re
 ### Topic Graph Expansion Module 
 Topic Graph Expansion Module automatically expands the existing topic graph to incorporate a set of emerging concepts (topics or study units). 
 It expands the coverage to help users learn from the roadmap that reflects the up-to-date topics.
+
+### Content Filtering
+Content Filtering Module filters irrelevant study materials among english YouTube videos automatically crawled for each "study unit" (a low-level topic related to AI).
+This module is designed to ensure that the service does not include irrelevant english video materials for each study unit.
