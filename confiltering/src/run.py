@@ -50,13 +50,16 @@ def run(args):
             #create dataset
             data = SUdataset(args.temp_dir, args.transcript_path, file_name, preprocessed_label_name, args.pretrained_lm, args.truncated_len)
             #filtering
-            label_words, relevant_idx, category_vocab, cal_freq, only_manually_cate_vocab, only_youtube_cate_vocab = Filtering(data,args.temp_dir, included_abb,
+            results = Filtering(data,args.temp_dir, included_abb,
                                             args.category_vocab_size).making_catevoca_and_classification(model, top_pred_num=args.top_pred_num,
                                             match_threshold=args.match_threshold, doc_weight=args.doc_weight)
+            if results == None:
+                print(f'There is no transcript which includes label : {file_name}')
+                continue
             #saving results
-            extract_relevant_idx(args.out_path, args.transcript_path, file_name, label_words, relevant_idx, cal_freq, included_abb, num_word_threshold=args.num_word_threshold, low_frequency=args.low_frequency)
+            extract_relevant_idx(args.out_path, args.transcript_path, file_name, results['label_words'], results['relevant_idx'], results['cal_freq'], included_abb, num_word_threshold=args.num_word_threshold, low_frequency=args.low_frequency)
             if args.saving_category_vocab_file == True:
-                saving_category_vocabulary_file(args.temp_dir, file_name, category_vocab, only_manually_cate_vocab, only_youtube_cate_vocab)
+                saving_category_vocabulary_file(args.temp_dir, file_name, results['category_vocab'], results['only_manually_cate_vocab'], results['only_youtube_cate_vocab'])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='run', formatter_class=argparse.ArgumentDefaultsHelpFormatter) 

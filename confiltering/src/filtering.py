@@ -1,3 +1,4 @@
+from email.policy import default
 import warnings
 import torch
 import numpy as np
@@ -37,7 +38,6 @@ class Filtering:
     def making_catevoca_and_classification(self, model, top_pred_num=50, match_threshold=30, doc_weight=2):
         result = self.data.make_tensordataset(self.data.label_name_data)
         if result == None:
-            print(f'There is no transcript which includes label : {self.data.file_su_name}')
             return None
         else:   
             datasets, self.words = result[0], result[1]
@@ -162,6 +162,13 @@ class Filtering:
                         relevant_idx[word].append(trans_idx)
 
         for label, category_vocab in self.category_vocab.items():
-            print(f"{label}'s category vocabulary: {[self.inv_vocab[w] for w in category_vocab]}")      
-        return self.words, relevant_idx, self.category_vocab, self.cal_freq, self.only_manually_cate_vocab, self.only_youtube_cate_vocab
+            print(f"{label}'s category vocabulary: {[self.inv_vocab[w] for w in category_vocab]}")
+        result = defaultdict()
+        result['label_words'] = self.words
+        result['relevant_idx'] = relevant_idx
+        result['category_vocab'] = self.category_vocab
+        result['cal_freq'] = self.cal_freq
+        result['only_manually_cate_vocab'] = self.only_manually_cate_vocab
+        result['only_youtube_cate_vocab'] = self.only_youtube_cate_vocab
+        return result
     
