@@ -7,7 +7,6 @@ from collections import defaultdict
 import warnings
 from nltk.corpus import stopwords
 import json
-warnings.filterwarnings("ignore")
 
 class SUdataset(object):
     def __init__(self,temp_dir,transcript_path,file_su_name,su_name_dict, lm, truncated_len):

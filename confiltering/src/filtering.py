@@ -3,7 +3,6 @@ import torch
 import numpy as np
 from nltk.corpus import stopwords
 from collections import defaultdict
-warnings.filterwarnings("ignore")
 
 class Filtering:
     def __init__(self, data, temp_dir, included_abb, category_vocab_size):
@@ -38,7 +37,7 @@ class Filtering:
     def making_catevoca_and_classification(self, model, top_pred_num=50, match_threshold=30, doc_weight=2):
         result = self.data.make_tensordataset(self.data.label_name_data)
         if result == None:
-            print(f'There is no transcript which includes labels : {self.data.study_unit_name}')
+            print(f'There is no transcript which includes label : {self.data.file_su_name}')
             return None
         else:   
             datasets, self.words = result[0], result[1]

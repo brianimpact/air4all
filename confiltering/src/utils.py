@@ -134,9 +134,6 @@ def remove_suid(study_unit_name):
         remove_su_id = ') '.join(search_name.split(') ')[1:]).lower()
     elif len(remove_su_id) <3:
         remove_su_id =  search_name.split(') ')[1].lower()
-
-    if remove_su_id == 'None':
-        warnings.warn(f'There is no transcripts related to {study_unit_name}')
     return remove_su_id
 
 # remove / in study unit name
