@@ -5,6 +5,7 @@ import argparse
 from torch.nn import DataParallel
 import torch
 import json
+from transformers import BertTokenizer
 from utils import extract_relevant_idx, saving_category_vocabulary_file, making_abb_list, remove_slash, remove_suid
 from preprocessing import PreproSUTranscript, preprocess_su_name
 from model import SUClassModel
@@ -39,6 +40,7 @@ def run(args):
     if torch.cuda.is_available():
         model = DataParallel(model.cuda())
     model.eval()
+    tokenizer = BertTokenizer.from_pretrained(args.pretrained_lm, do_lower_case=True)
     #filtering
     for name in tqdm(file_list):
         remove_su_id = remove_suid(name)
@@ -48,7 +50,7 @@ def run(args):
             included_abb, _, _, _, preprocessed_label_name = preprocess_su_name(remove_su_id,abb)
             print('words that consist label :', preprocessed_label_name)
             #create dataset
-            data = SUdataset(args.temp_dir, args.transcript_path, file_name, preprocessed_label_name, args.pretrained_lm, args.truncated_len)
+            data = SUdataset(args.temp_dir, args.transcript_path, file_name, preprocessed_label_name, tokenizer, args.truncated_len)
             #filtering
             results = Filtering(data,args.temp_dir, included_abb,
                                             args.category_vocab_size).making_catevoca_and_classification(model, top_pred_num=args.top_pred_num,

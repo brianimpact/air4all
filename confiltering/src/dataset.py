@@ -1,7 +1,6 @@
 from distutils.filelist import findall
 import torch
 import os
-from transformers import BertTokenizer
 from torch.utils.data import TensorDataset
 from collections import defaultdict
 import warnings
@@ -9,11 +8,11 @@ from nltk.corpus import stopwords
 import json
 
 class SUdataset(object):
-    def __init__(self,temp_dir,transcript_path,file_su_name,su_name_dict, lm, truncated_len):
+    def __init__(self,temp_dir,transcript_path,file_su_name,su_name_dict, tokenizer, truncated_len):
         self.temp_dir = temp_dir
         self.su_name_dict = su_name_dict
         self.file_su_name = file_su_name
-        self.tokenizer = BertTokenizer.from_pretrained(lm, do_lower_case=True)
+        self.tokenizer = tokenizer
         self.vocab = self.tokenizer.get_vocab()
         self.max_len = 512
         self.truncated_len = truncated_len
