@@ -242,17 +242,14 @@ def preprocess_su_name(su_name,abb):
         else:
             su_name = su_name.replace('/',' ')
 
-    special_char = {'++' : 'plus plus', '*' : 'star','ⅰ':'one','ⅱ':'two','λ':'lambda'}
+    special_char = {'++' : 'plus plus','+' : 'plus', '*' : 'star','ⅰ':'one','ⅱ':'two','λ':'lambda'}
     not_chars = re.findall('[^a-zA-Z0-9_,()\' :\-]+',su_name)
     if len(not_chars) >= 1:
         included_notchar = True
     if included_notchar == True:
         for not_char in not_chars:
             if not_char in special_char:
-                if not_char == '++':
-                    su_name = su_name.replace(not_char,' '+special_char[not_char])
-                else:
-                    su_name = su_name.replace(not_char,special_char[not_char])
+                su_name = su_name.replace(not_char,special_char[not_char])
     if su_name == 'b- tree':
         su_name = su_name.replace('-','minus ')
 
