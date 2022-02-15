@@ -77,7 +77,7 @@ def extract_relevant_idx(out_path, transcript_path, file_su_name, label_words, r
         data_transcript = data_transcript_filter_freq
     else:
         data_transcript = data_transcript
-    print(f'{list(data_transcript.index)}')
+    print(f'All Content Indices : {list(data_transcript.index)}')
     cont_rele_trans = sum(data_transcript['relevance'])
     if cont_rele_trans == 0:
         warnings.warn(f'Thre is no relevant transcript in {file_su_name}')
